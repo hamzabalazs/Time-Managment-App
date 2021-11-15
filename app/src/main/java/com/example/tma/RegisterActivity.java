@@ -1,8 +1,10 @@
 package com.example.tma;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,13 +16,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.security.auth.login.LoginException;
 
 public class RegisterActivity extends AppCompatActivity {
+    Map<String, Object> user = new HashMap<>();
     TextView loginbtn;
     EditText mFullName, mEmail, mPassword;
     Button registerbtn;
@@ -40,6 +48,7 @@ public class RegisterActivity extends AppCompatActivity {
         loginbtn = findViewById(R.id.textView4);
         fAuth = FirebaseAuth.getInstance();
         progressbar = findViewById(R.id.progressBar);
+
 
         if(fAuth.getCurrentUser() != null){
             startActivity(new Intent(getApplicationContext(),MainActivity.class));
@@ -69,7 +78,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
 
                 if(password.length() < 8){
-                    mPassword.setError("Password must be atleast 8 characters long!");
+                    mPassword.setError("Password must be at least 8 characters long!");
                     return;
                 }
 
@@ -97,6 +106,8 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
         });
+
+
     }
     public void openLogin(){
         Intent intent = new Intent(this, LoginActivity.class);
