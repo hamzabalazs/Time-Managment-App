@@ -13,8 +13,9 @@ public class Event {
     private SimpleDateFormat eventStartsAtDate;
     private SimpleDateFormat eventEndsAtDate;
     private Priority priorityLevel;
+    private Zone zoneOfTheEvent;
 
-    public Event(int eventId, String eventTitle, String eventDescription, SimpleDateFormat eventStartsAtDate, SimpleDateFormat eventEndsAtDate,Priority priorityLevel) {
+    public Event(int eventId, String eventTitle, String eventDescription, SimpleDateFormat eventStartsAtDate, SimpleDateFormat eventEndsAtDate,Priority priorityLevel,Zone zoneOfTheEvent) {
         this.eventId = eventId;
         this.eventTitle = eventTitle;
         this.eventDescription = eventDescription;
@@ -22,6 +23,15 @@ public class Event {
         this.eventStartsAtDate = eventStartsAtDate;
         this.eventEndsAtDate = eventEndsAtDate;
         this.priorityLevel = priorityLevel;
+        this.zoneOfTheEvent = zoneOfTheEvent;
+    }
+
+    public Zone getZoneOfTheEvent() {
+        return zoneOfTheEvent;
+    }
+
+    public void setZoneOfTheEvent(Zone zoneOfTheEvent) {
+        this.zoneOfTheEvent = zoneOfTheEvent;
     }
 
     public Priority getPriorityLevel() {
