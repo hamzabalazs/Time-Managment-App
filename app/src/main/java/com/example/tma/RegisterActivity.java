@@ -28,9 +28,9 @@ import java.util.Map;
 import javax.security.auth.login.LoginException;
 
 public class RegisterActivity extends AppCompatActivity {
-    Map<String, Object> user = new HashMap<>();
+
     TextView loginbtn;
-    EditText mFullName, mEmail, mPassword;
+    EditText mEmail, mPassword;
     Button registerbtn;
     FirebaseAuth fAuth;
     ProgressBar progressbar;
@@ -41,7 +41,6 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        mFullName = findViewById(R.id.editTextName);
         mEmail = findViewById(R.id.editTextEmail);
         mPassword = findViewById(R.id.editTextPass);
         registerbtn = findViewById(R.id.button);
@@ -61,12 +60,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View v){
                 String email = mEmail.getText().toString().trim();
                 String password = mPassword.getText().toString().trim();
-                String name = mFullName.getText().toString().trim();
 
-                if(TextUtils.isEmpty(name)){
-                    mFullName.setError("Full Name is Required!");
-                    return;
-                }
 
                 if(TextUtils.isEmpty(email)){
                     mEmail.setError("Email is Required!");
@@ -89,7 +83,7 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             Toast.makeText(RegisterActivity.this,"User Created!",Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                            startActivity(new Intent(getApplicationContext(),UserInformationActivity.class));
                         }else{
                             Toast.makeText(RegisterActivity.this,"Error! " + task.getException().getMessage(),Toast.LENGTH_SHORT).show();
                             progressbar.setVisibility(View.GONE);
