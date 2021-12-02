@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1072577451796",
+    "project_id": "tmapp-6c556",
+    "storage_bucket": "tmapp-6c556.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1072577451796:android:003c2313324460c386d401",
+        "android_client_info": {
+          "package_name": "com.example.tma"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1072577451796-8rgfisclj1uv41hutsvb82mnl9jm25ie.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxwclKoAZg4nJhto4ICx1FAWpDW6ZTQxI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1072577451796-8rgfisclj1uv41hutsvb82mnl9jm25ie.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
