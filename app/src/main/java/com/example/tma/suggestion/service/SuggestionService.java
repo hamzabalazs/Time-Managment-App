@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 //The suggestion service is giving suggestions to the user, taking in consideration the zone and the priority of the event
 public class SuggestionService {
@@ -29,55 +30,64 @@ public class SuggestionService {
 
     //Sorts the events(higher priority first)
     public void sortEventsByPriority(List<Event> events) {
-        Collections.sort(events,new Event.SortByPriority());
+        Collections.sort(events, new Event.SortByPriority());
     }
 
     //Sorts the events by zones and within the zone by priority
-    public void sortByZone(){
-        HashMap<Zone,List<Event>> eventsInZones =new HashMap<>();
+    public void sortByZone() {
+        HashMap<Zone, List<Event>> eventsInZones = new HashMap<>();
         List<Event> nullListOfEvent = Collections.emptyList();
 
         //sort all the events by priority so the events will be added to the list by zones already sorted
         sortEventsByPriority(events);
-        for (Event zoneEvent: events) {
+
+        //Initialize for every zone an emptyList
+        eventsInZones.put(Zone.TUDOR, nullListOfEvent);
+        eventsInZones.put(Zone.LIBERTATII, nullListOfEvent);
+        eventsInZones.put(Zone.DAMBU, nullListOfEvent);
+        eventsInZones.put(Zone.UNIRII, nullListOfEvent);
+        eventsInZones.put(Zone.SAPTENOIEMBRIE, nullListOfEvent);
+        eventsInZones.put(Zone.MURESENI, nullListOfEvent);
+        eventsInZones.put(Zone.CENTRU, nullListOfEvent);
+
+        for (Event zoneEvent : events) {
             switch (zoneEvent.getZoneOfTheEvent()) {
                 case TUDOR:
-                    eventsInZones.put(Zone.TUDOR, nullListOfEvent);
                     eventsInZones.get(Zone.TUDOR).add(zoneEvent);
                     break;
                 case LIBERTATII:
-                    eventsInZones.put(Zone.LIBERTATII, nullListOfEvent);
                     eventsInZones.get(Zone.LIBERTATII).add(zoneEvent);
                     break;
                 case DAMBU:
-                    eventsInZones.put(Zone.DAMBU, nullListOfEvent);
                     eventsInZones.get(Zone.DAMBU).add(zoneEvent);
                     break;
                 case UNIRII:
-                    eventsInZones.put(Zone.UNIRII, nullListOfEvent);
                     eventsInZones.get(Zone.UNIRII).add(zoneEvent);
                     break;
                 case SAPTENOIEMBRIE:
-                    eventsInZones.put(Zone.SAPTENOIEMBRIE, nullListOfEvent);
                     eventsInZones.get(Zone.SAPTENOIEMBRIE).add(zoneEvent);
                     break;
                 case MURESENI:
-                    eventsInZones.put(Zone.MURESENI, nullListOfEvent);
                     eventsInZones.get(Zone.MURESENI).add(zoneEvent);
                     break;
                 case CENTRU:
-                    eventsInZones.put(Zone.CENTRU, nullListOfEvent);
                     eventsInZones.get(Zone.CENTRU).add(zoneEvent);
                     break;
+                default:
+                    System.out.println("Invalid zone for an event");
             }
         }
-        for (Zone key:eventsInZones.keySet()){
-            List<Event> eventsSortedByZone= new LinkedList<>();
-            List<Event> eventList = eventsInZones.get(key);
-//                    forEach(event -> {
-//                eventsSortedByZone.add(event);
-//            });
+        //Create a new list of events with all of the zones already in sorted order by zones and by priority
+        List<Event> eventListSortedByZones = new LinkedList<>();
+        for (Zone key : eventsInZones.keySet()) {
+            for (int i = 0; i < eventsInZones.get(key).size(); i++) {
+                eventListSortedByZones.add(eventsInZones.get(key).get(i));
+            }
         }
+
+        //Delete the unsorted events from the list and add the sorted one to it instead.
+        events.clear();
+        events.addAll(eventListSortedByZones);
 
     }
 }
