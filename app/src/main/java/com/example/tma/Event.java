@@ -3,6 +3,7 @@ package com.example.tma;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.Date;
 
 public class Event {
@@ -25,6 +26,7 @@ public class Event {
         this.priorityLevel = priorityLevel;
         this.zoneOfTheEvent = zoneOfTheEvent;
     }
+
 
     public Zone getZoneOfTheEvent() {
         return zoneOfTheEvent;
@@ -81,4 +83,49 @@ public class Event {
     public void setEventEndsAtDate(SimpleDateFormat eventEndsAtDate) {
         this.eventEndsAtDate = eventEndsAtDate;
     }
+
+    public static class SortByPriority implements Comparator<Event>{
+
+        @Override
+        public int compare(Event e1, Event e2) {
+            if(e1.getPriorityLevel() == e2.getPriorityLevel()){
+                return 0;
+            }else{
+            if(e1.getPriorityLevel() == Priority.CRITICAL && e2.getPriorityLevel() != Priority.CRITICAL){
+                return 1;
+            }else {
+                if (e1.getPriorityLevel() == Priority.HIGH && e2.getPriorityLevel() != Priority.CRITICAL && e2.getPriorityLevel() != Priority.HIGH){
+                    return 1;
+                }else{
+                    if(e1.getPriorityLevel() == Priority.NORMAL && e2.getPriorityLevel() != Priority.CRITICAL && e2.getPriorityLevel() != Priority.HIGH && e2.getPriorityLevel() != Priority.NORMAL ){
+                        return 1;
+                    }else{
+                        if(e1.getPriorityLevel() == Priority.LOW && e2.getPriorityLevel() != Priority.LOW){
+                            return -1;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if(e2.getPriorityLevel() == Priority.CRITICAL && e1.getPriorityLevel() != Priority.CRITICAL){
+                return -1;
+            }else {
+                if (e2.getPriorityLevel() == Priority.HIGH && e1.getPriorityLevel() != Priority.CRITICAL && e1.getPriorityLevel() != Priority.HIGH){
+                    return -1;
+                }else{
+                    if(e2.getPriorityLevel() == Priority.NORMAL && e1.getPriorityLevel() != Priority.CRITICAL && e1.getPriorityLevel() != Priority.HIGH && e1.getPriorityLevel() != Priority.NORMAL ){
+                        return -1;
+                    }else{
+                        if(e2.getPriorityLevel() == Priority.LOW && e1.getPriorityLevel() != Priority.LOW){
+                            return 1;
+                          }
+                      }
+                  }
+                }
+            return 0;
+        }
+
+        }
+
 }
