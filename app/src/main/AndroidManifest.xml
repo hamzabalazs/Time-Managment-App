@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TMA">
         <activity
+            android:name=".AddEventActivity"
+            android:exported="true" />
+        <activity
             android:name=".UserInformationActivity"
             android:exported="true" />
         <activity

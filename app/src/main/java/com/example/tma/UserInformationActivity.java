@@ -55,6 +55,7 @@ public class UserInformationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(user!=null){
                     String email = CurrentUser.getEmail();
+                    String mUid = CurrentUser.getUid();
                     String mFirstName = firstname.getText().toString().trim();
                     String mLastName = lastname.getText().toString().trim();
                     String mZone = zone.getSelectedItem().toString();
@@ -73,6 +74,7 @@ public class UserInformationActivity extends AppCompatActivity {
                     user.put("First Name",mFirstName);
                     user.put("Last Name",mLastName);
                     user.put("Zone",mZone);
+                    user.put("UID",mUid);
 
                     db.collection("users")
                             .add(user)

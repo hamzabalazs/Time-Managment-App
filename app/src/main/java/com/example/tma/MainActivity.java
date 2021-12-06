@@ -15,12 +15,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        calendarButton = findViewById(R.id.EventButton);
         calendarButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(),CalendarActivity.class));
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),AddEventActivity.class));
             }
         });
     }
