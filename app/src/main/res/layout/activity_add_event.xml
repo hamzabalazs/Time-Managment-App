@@ -6,6 +6,46 @@
     android:layout_height="match_parent"
     tools:context=".AddEventActivity">
 
+    <NumberPicker
+        android:id="@+id/StartNumPickHour"
+        android:layout_width="49dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toEndOf="@+id/eventName"
+        app:layout_constraintTop_toBottomOf="@+id/calendarView" />
+
+    <NumberPicker
+        android:id="@+id/EndNumPickHour"
+        android:layout_width="49dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="36dp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toEndOf="@+id/eventPriority"
+        app:layout_constraintTop_toBottomOf="@+id/StartNumPickHour" />
+
+    <NumberPicker
+        android:id="@+id/EndNumPickMin"
+        android:layout_width="49dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="36dp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toEndOf="@+id/EndNumPickHour"
+        app:layout_constraintTop_toBottomOf="@+id/StartNumPickMin" />
+
+    <NumberPicker
+        android:id="@+id/StartNumPickMin"
+        android:layout_width="49dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toEndOf="@+id/StartNumPickHour"
+        app:layout_constraintTop_toBottomOf="@+id/calendarView" />
+
     <Spinner
         android:id="@+id/eventPriority"
         android:layout_width="210dp"
@@ -59,19 +99,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.079"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventTime" />
-
-    <EditText
-        android:id="@+id/eventTime"
-        android:layout_width="210dp"
-        android:layout_height="38dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="Event Time( hh:mm )"
-        android:inputType="time"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/eventName" />
 
     <Button
@@ -79,10 +106,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="152dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="92dp"
         android:text="Add Event"
         android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/eventPriority" />
+
+    <TextView
+        android:id="@+id/startTimeText"
+        android:layout_width="70dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="84dp"
+        android:text="Start Time"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendarView" />
+
+    <TextView
+        android:id="@+id/endTimeText"
+        android:layout_width="70dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="84dp"
+        android:text="End Time"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/startTimeText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

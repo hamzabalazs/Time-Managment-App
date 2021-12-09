@@ -14,7 +14,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,8 +41,10 @@ public class AddEventActivity extends AppCompatActivity {
 
     Map<String, Object> event = new HashMap<>();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    NumberPicker startTimeHour,startTimeMin,endTimeHour,endTimeMin;
+    TextView startTimeTextView,endTimeTextView;
     CalendarView calendarV;
-    EditText name, time;
+    EditText name;
     Spinner zone, priority;
     Button button;
     Calendar calendar;
@@ -53,13 +57,18 @@ public class AddEventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_event);
 
         name = findViewById(R.id.eventName);
-        time = findViewById(R.id.eventTime);
         zone = findViewById(R.id.eventZone);
         priority = findViewById(R.id.eventPriority);
         calendarV = findViewById(R.id.calendarView);
         button = findViewById(R.id.eventButton);
         calendar = Calendar.getInstance();
         tz = TimeZone.getDefault();
+        startTimeTextView = findViewById(R.id.startTimeText);
+        startTimeHour = findViewById(R.id.StartNumPickHour);
+        startTimeMin = findViewById(R.id.StartNumPickMin);
+        endTimeTextView = findViewById(R.id.endTimeText);
+        endTimeHour = findViewById(R.id.EndNumPickHour);
+        endTimeMin = findViewById(R.id.EndNumPickMin);
 
         zone.setAdapter(new ArrayAdapter<Zone>(this,R.layout.support_simple_spinner_dropdown_item,Zone.values()));
         priority.setAdapter(new ArrayAdapter<Priority>(this,R.layout.support_simple_spinner_dropdown_item,Priority.values()));
@@ -69,10 +78,23 @@ public class AddEventActivity extends AppCompatActivity {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 name.setVisibility(View.VISIBLE);
-                time.setVisibility(View.VISIBLE);
                 zone.setVisibility(View.VISIBLE);
                 priority.setVisibility(View.VISIBLE);
+                startTimeTextView.setVisibility(View.VISIBLE);
+                startTimeHour.setVisibility(View.VISIBLE);
+                startTimeMin.setVisibility(View.VISIBLE);
+                endTimeTextView.setVisibility(View.VISIBLE);
+                endTimeHour.setVisibility(View.VISIBLE);
+                endTimeMin.setVisibility(View.VISIBLE);
                 button.setVisibility(View.VISIBLE);
+                startTimeHour.setMinValue(0);
+                startTimeHour.setMaxValue(23);
+                startTimeMin.setMinValue(0);
+                startTimeMin.setMaxValue(59);
+                endTimeHour.setMinValue(0);
+                endTimeHour.setMaxValue(23);
+                endTimeMin.setMinValue(0);
+                endTimeMin.setMaxValue(59);
 
             }
         });
@@ -83,37 +105,35 @@ public class AddEventActivity extends AppCompatActivity {
                 if(event!=null){
                     //Event event = new Event();
                     SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
-                    String mDate = sdfDate.format(new Date(calendarV.getDate()));
-                    String mTime = time.getText().toString().trim();
-                    String mUid = CurrentUser.getUid();
-                    String mName = name.getText().toString().trim();
-                    String mZone = zone.getSelectedItem().toString();
-                    String mPriority = priority.getSelectedItem().toString();
+                    String eventDate = sdfDate.format(new Date(calendarV.getDate()));
+                    String userUid = CurrentUser.getUid();
+                    String eventTitle = name.getText().toString().trim();
+                    String eventZone = zone.getSelectedItem().toString();
+                    String eventPriority = priority.getSelectedItem().toString();
                     calendar.add(Calendar.MILLISECOND, tz.getOffset(calendar.getTimeInMillis()));
                     SimpleDateFormat sdfTimeZone = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
                     Date currentTimeZone = new Date((long)1379487711*1000);
                     String mCurrentTimeZone = sdfTimeZone.format(currentTimeZone);
+                    String eventStartTime = startTimeHour.getValue() + ":" + startTimeMin.getValue();
+                    String eventEndTime = endTimeHour.getValue() + ":" + endTimeMin.getValue();
 
 
-                    
-                    if(TextUtils.isEmpty(mName)){
+                    if(TextUtils.isEmpty(eventTitle)){
                         name.setError("Event name is required!");
                         return;
                     }
-                    if(TextUtils.isEmpty(mTime)){
-                        time.setError("Event time is required!");
-                        return;
-                    }
+
 
                     CollectionReference events = db.collection("events");
 
-                    event.put("UID",mUid);
-                    event.put("name",mName);
-                    event.put("time",mTime);
-                    event.put("date",mDate);
-                    event.put("zone",mZone);
-                    event.put("priority",mPriority);
+                    event.put("UID",userUid);
+                    event.put("Title",eventTitle);
+                    event.put("date",eventDate);
+                    event.put("zone",eventZone);
+                    event.put("priority",eventPriority);
                     event.put("lastUpdate",mCurrentTimeZone);
+                    event.put("startTime",eventStartTime);
+                    event.put("endTime",eventEndTime);
 
 
 
