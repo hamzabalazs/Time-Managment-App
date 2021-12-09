@@ -1,8 +1,20 @@
 package com.example.tma.suggestion.service;
 
+import androidx.annotation.NonNull;
+
 import com.example.tma.Event;
 import com.example.tma.Priority;
 import com.example.tma.Zone;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.core.QueryListener;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,16 +29,19 @@ import java.util.logging.Logger;
 //The suggestion service is giving suggestions to the user, taking in consideration the zone and the priority of the event
 public class SuggestionService {
     private final List<Event> events;
+    final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    public SuggestionService(List<Event> events) {
+    public SuggestionService(List<Event> events,FirebaseUser currentUser) {
+        DocumentReference docRef = db.collection("events").document(currentUser.getUid());
+//        Event event = new Event(currentUser.getUid(),currentUser.getEventTitle,currentUser.getEventDescription,currentUser.getEventStartsAtDate,currentUser.getEventEndsAtDate,currentUser.)
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+            }
+        });
         this.events = events;
     }
 
-//    public Event highPriority(Event firstEvent,Event secondEvent){
-//        if(firstEvent.getPriorityLevel() == Priority.CRITICAL && secondEvent.getPriorityLevel() != Priority.CRITICAL){
-//            return firstEvent;
-//        }
-//    }
 
     //Sorts the events(higher priority first)
     public void sortEventsByPriority(List<Event> events) {
