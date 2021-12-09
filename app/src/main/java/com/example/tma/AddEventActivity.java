@@ -44,7 +44,7 @@ public class AddEventActivity extends AppCompatActivity {
     NumberPicker startTimeHour,startTimeMin,endTimeHour,endTimeMin;
     TextView startTimeTextView,endTimeTextView;
     CalendarView calendarV;
-    EditText name;
+    EditText name, description;
     Spinner zone, priority;
     Button button;
     Calendar calendar;
@@ -57,6 +57,7 @@ public class AddEventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_event);
 
         name = findViewById(R.id.eventName);
+        description = findViewById(R.id.eventDescription);
         zone = findViewById(R.id.eventZone);
         priority = findViewById(R.id.eventPriority);
         calendarV = findViewById(R.id.calendarView);
@@ -78,6 +79,7 @@ public class AddEventActivity extends AppCompatActivity {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 name.setVisibility(View.VISIBLE);
+                description.setVisibility(View.VISIBLE);
                 zone.setVisibility(View.VISIBLE);
                 priority.setVisibility(View.VISIBLE);
                 startTimeTextView.setVisibility(View.VISIBLE);
