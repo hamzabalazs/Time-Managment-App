@@ -20,16 +20,13 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.sql.Time;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -108,6 +105,7 @@ public class AddEventActivity extends AppCompatActivity {
                     //Event event = new Event();
                     SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
                     String eventDate = sdfDate.format(new Date(calendarV.getDate()));
+                    String eventDescription = description.getText().toString().trim();
                     String userUid = CurrentUser.getUid();
                     String eventTitle = name.getText().toString().trim();
                     String eventZone = zone.getSelectedItem().toString();
@@ -130,6 +128,7 @@ public class AddEventActivity extends AppCompatActivity {
 
                     event.put("UID",userUid);
                     event.put("Title",eventTitle);
+                    event.put("Description",eventDescription);
                     event.put("date",eventDate);
                     event.put("zone",eventZone);
                     event.put("priority",eventPriority);
