@@ -1,21 +1,48 @@
 package com.example.tma;
 
+import static android.content.ContentValues.TAG;
+
+import static androidx.core.content.ContextCompat.startActivity;
+
+import android.content.Intent;
+import android.text.TextUtils;
+import android.util.Log;
+import android.widget.CalendarView;
+import android.widget.EditText;
+import android.widget.NumberPicker;
+import android.widget.Spinner;
+import android.app.Activity;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.logging.Logger;
 
 public class Event {
     private int eventId;
     private String eventTitle;
     private String eventDescription;
     private Date eventCreatedOnTimestamp;
-    private SimpleDateFormat eventStartsAtDate;
-    private SimpleDateFormat eventEndsAtDate;
+    private String eventStartsAtDate;
+    private String eventEndsAtDate;
     private Priority priorityLevel;
     private Zone zoneOfTheEvent;
 
-    public Event(int eventId, String eventTitle, String eventDescription, SimpleDateFormat eventStartsAtDate, SimpleDateFormat eventEndsAtDate,Priority priorityLevel,Zone zoneOfTheEvent) {
+    public Event(int eventId, String eventTitle, String eventDescription, String eventStartsAtDate, String eventEndsAtDate, Priority priorityLevel, Zone zoneOfTheEvent) {
         this.eventId = eventId;
         this.eventTitle = eventTitle;
         this.eventDescription = eventDescription;
@@ -25,6 +52,50 @@ public class Event {
         this.priorityLevel = priorityLevel;
         this.zoneOfTheEvent = zoneOfTheEvent;
     }
+
+    public static void addEventOnClick(String userUid, NumberPicker startTimeHour, NumberPicker startTimeMin, NumberPicker endTimeHour, NumberPicker endTimeMin, EditText eventTitle, EditText eventDescription, Spinner zone, Spinner priority) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, Object> event = new HashMap<>();
+        String eventStartTime = startTimeHour.getValue() + ":" + startTimeMin.getValue();
+        String eventEndTime = endTimeHour.getValue() + ":" + endTimeMin.getValue();
+        Priority priority1 =
+        //userId can't be empty because then we don't know who created the event.
+        if (userUid.isEmpty()) {
+            Log.e("AddEventActivity", "Error creating the event, userId null.");
+            return;
+        }
+        if (eventTitle.getText().toString().isEmpty()) {
+            eventTitle.setError("Event title is required!");
+            return;
+        }
+        Event event1 = new Event(userUid,eventTitle.getText().toString().trim(),eventDescription,eventStartTime,eventEndTime,,zone);
+        //Create an event
+        event.put("UID", userUid);
+        event.put("Title", eventTitle.getText().toString().trim());
+        event.put("Description", eventDescription);
+        event.put("StartsAtDate", eventStartTime);
+        event.put("EndsAtDate", eventEndTime);
+        event.put("zone", zone.getSelectedItem().toString().trim());
+        event.put("priority", priority.getSelectedItem().toString().trim());
+        event.put("createdAtTimestamp", new Date(System.currentTimeMillis()));
+
+        //Adding the created event to the db
+        db.collection("events")
+                .add(event)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "Event has been added!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding event", e);
+                    }
+                });
+    }
+
 
     public Zone getZoneOfTheEvent() {
         return zoneOfTheEvent;
@@ -66,19 +137,19 @@ public class Event {
         return eventCreatedOnTimestamp;
     }
 
-    public SimpleDateFormat getEventStartsAtDate() {
+    public String getEventStartsAtDate() {
         return eventStartsAtDate;
     }
 
-    public void setEventStartsAtDate(SimpleDateFormat eventStartsAtDate) {
+    public void setEventStartsAtDate(String eventStartsAtDate) {
         this.eventStartsAtDate = eventStartsAtDate;
     }
 
-    public SimpleDateFormat getEventEndsAtDate() {
+    public String getEventEndsAtDate() {
         return eventEndsAtDate;
     }
 
-    public void setEventEndsAtDate(SimpleDateFormat eventEndsAtDate) {
+    public void setEventEndsAtDate(String eventEndsAtDate) {
         this.eventEndsAtDate = eventEndsAtDate;
     }
 }
