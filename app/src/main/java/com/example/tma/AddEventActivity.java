@@ -2,8 +2,6 @@ package com.example.tma;
 
 import static android.content.ContentValues.TAG;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,16 +20,13 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.sql.Time;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -43,10 +38,10 @@ public class AddEventActivity extends AppCompatActivity {
 
     Map<String, Object> event = new HashMap<>();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    NumberPicker startTimeHour, startTimeMin, endTimeHour, endTimeMin;
-    TextView startTimeTextView, endTimeTextView;
+    NumberPicker startTimeHour,startTimeMin,endTimeHour,endTimeMin;
+    TextView startTimeTextView,endTimeTextView;
     CalendarView calendarV;
-    EditText eventTitle;
+    EditText name, description;
     Spinner zone, priority;
     Button button;
     Calendar calendar;
@@ -58,7 +53,8 @@ public class AddEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
 
-        eventTitle = findViewById(R.id.eventName);
+        name = findViewById(R.id.eventName);
+        description = findViewById(R.id.eventDescription);
         zone = findViewById(R.id.eventZone);
         priority = findViewById(R.id.eventPriority);
         calendarV = findViewById(R.id.calendarView);
@@ -72,14 +68,15 @@ public class AddEventActivity extends AppCompatActivity {
         endTimeHour = findViewById(R.id.EndNumPickHour);
         endTimeMin = findViewById(R.id.EndNumPickMin);
 
-        zone.setAdapter(new ArrayAdapter<Zone>(this, R.layout.support_simple_spinner_dropdown_item, Zone.values()));
-        priority.setAdapter(new ArrayAdapter<Priority>(this, R.layout.support_simple_spinner_dropdown_item, Priority.values()));
+        zone.setAdapter(new ArrayAdapter<Zone>(this,R.layout.support_simple_spinner_dropdown_item,Zone.values()));
+        priority.setAdapter(new ArrayAdapter<Priority>(this,R.layout.support_simple_spinner_dropdown_item,Priority.values()));
 
         FirebaseUser CurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         calendarV.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                eventTitle.setVisibility(View.VISIBLE);
+                name.setVisibility(View.VISIBLE);
+                description.setVisibility(View.VISIBLE);
                 zone.setVisibility(View.VISIBLE);
                 priority.setVisibility(View.VISIBLE);
                 startTimeTextView.setVisibility(View.VISIBLE);
@@ -104,9 +101,62 @@ public class AddEventActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(event!=null){
+                    //Event event = new Event();
+                    SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
+                    String eventDate = sdfDate.format(new Date(calendarV.getDate()));
+                    String eventDescription = description.getText().toString().trim();
+                    String userUid = CurrentUser.getUid();
+                    String eventTitle = name.getText().toString().trim();
+                    String eventZone = zone.getSelectedItem().toString();
+                    String eventPriority = priority.getSelectedItem().toString();
+                    calendar.add(Calendar.MILLISECOND, tz.getOffset(calendar.getTimeInMillis()));
+                    SimpleDateFormat sdfTimeZone = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+                    Date currentTimeZone = new Date((long)1379487711*1000);
+                    String mCurrentTimeZone = sdfTimeZone.format(currentTimeZone);
+                    String eventStartTime = startTimeHour.getValue() + ":" + startTimeMin.getValue();
+                    String eventEndTime = endTimeHour.getValue() + ":" + endTimeMin.getValue();
+
+
+                    if(TextUtils.isEmpty(eventTitle)){
+                        name.setError("Event name is required!");
+                        return;
+                    }
+
+
+                    CollectionReference events = db.collection("events");
+
+                    event.put("UID",userUid);
+                    event.put("Title",eventTitle);
+                    event.put("Description",eventDescription);
+                    event.put("date",eventDate);
+                    event.put("zone",eventZone);
+                    event.put("priority",eventPriority);
+                    event.put("lastUpdate",mCurrentTimeZone);
+                    event.put("startTime",eventStartTime);
+                    event.put("endTime",eventEndTime);
+
+
+
+
+                    db.collection("events")
+                            .add(event)
+                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Log.d(TAG, "Event has been added!");
+                                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG,"Error adding event",e);
+                                }
+                            });
+                }
             }
         });
+
     }
-
-
 }
