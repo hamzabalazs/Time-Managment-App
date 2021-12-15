@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 public class Event {
-    private int eventId;
+    private String eventId;
     private String eventTitle;
     private String eventDescription;
     private Date eventCreatedOnTimestamp;
@@ -41,9 +41,10 @@ public class Event {
     private String eventEndsAtDate;
     private Priority priorityLevel;
     private Zone zoneOfTheEvent;
+    private String userUid;
 
-    public Event(int eventId, String eventTitle, String eventDescription, String eventStartsAtDate, String eventEndsAtDate, Priority priorityLevel, Zone zoneOfTheEvent) {
-        this.eventId = eventId;
+    public Event(String userUid, String eventTitle, String eventDescription, String eventStartsAtDate, String eventEndsAtDate, Priority priorityLevel, Zone zoneOfTheEvent) {
+        this.userUid = userUid;
         this.eventTitle = eventTitle;
         this.eventDescription = eventDescription;
         this.eventCreatedOnTimestamp = new Date(System.currentTimeMillis());
@@ -58,7 +59,18 @@ public class Event {
         Map<String, Object> event = new HashMap<>();
         String eventStartTime = startTimeHour.getValue() + ":" + startTimeMin.getValue();
         String eventEndTime = endTimeHour.getValue() + ":" + endTimeMin.getValue();
-        Priority priority1 =
+        Priority priority1 = Priority.NORMAL;
+        for(Priority priority2 : Priority.values()){
+            if(priority.getSelectedItem().toString().trim() == priority2.name()){
+                priority1 = priority2;
+            }
+        }
+        Zone zone2 = Zone.CENTRU;
+        for(Zone zone1: Zone.values()){
+            if(zone.getSelectedItem().toString() == zone1.name()){
+                zone2 = zone1;
+            }
+        }
         //userId can't be empty because then we don't know who created the event.
         if (userUid.isEmpty()) {
             Log.e("AddEventActivity", "Error creating the event, userId null.");
@@ -68,7 +80,7 @@ public class Event {
             eventTitle.setError("Event title is required!");
             return;
         }
-        Event event1 = new Event(userUid,eventTitle.getText().toString().trim(),eventDescription,eventStartTime,eventEndTime,,zone);
+        Event event1 = new Event(userUid,eventTitle.getText().toString().trim(),"Empty",eventStartTime,eventEndTime,priority1,zone2);
         //Create an event
         event.put("UID", userUid);
         event.put("Title", eventTitle.getText().toString().trim());
@@ -86,6 +98,7 @@ public class Event {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "Event has been added!");
+                        event1.setEventId(db.collection("events").document().getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -96,6 +109,9 @@ public class Event {
                 });
     }
 
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
 
     public Zone getZoneOfTheEvent() {
         return zoneOfTheEvent;
@@ -113,7 +129,7 @@ public class Event {
         this.priorityLevel = priorityLevel;
     }
 
-    public int getEventId() {
+    public String getEventId() {
         return eventId;
     }
 

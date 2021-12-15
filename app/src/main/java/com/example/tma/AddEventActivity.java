@@ -101,60 +101,16 @@ public class AddEventActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(event!=null){
-                    //Event event = new Event();
-                    SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
-                    String eventDate = sdfDate.format(new Date(calendarV.getDate()));
-                    String eventDescription = description.getText().toString().trim();
-                    String userUid = CurrentUser.getUid();
-                    String eventTitle = name.getText().toString().trim();
-                    String eventZone = zone.getSelectedItem().toString();
-                    String eventPriority = priority.getSelectedItem().toString();
-                    calendar.add(Calendar.MILLISECOND, tz.getOffset(calendar.getTimeInMillis()));
-                    SimpleDateFormat sdfTimeZone = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-                    Date currentTimeZone = new Date((long)1379487711*1000);
-                    String mCurrentTimeZone = sdfTimeZone.format(currentTimeZone);
-                    String eventStartTime = startTimeHour.getValue() + ":" + startTimeMin.getValue();
-                    String eventEndTime = endTimeHour.getValue() + ":" + endTimeMin.getValue();
-
-
-                    if(TextUtils.isEmpty(eventTitle)){
-                        name.setError("Event name is required!");
-                        return;
-                    }
-
-
-                    CollectionReference events = db.collection("events");
-
-                    event.put("UID",userUid);
-                    event.put("Title",eventTitle);
-                    event.put("Description",eventDescription);
-                    event.put("date",eventDate);
-                    event.put("zone",eventZone);
-                    event.put("priority",eventPriority);
-                    event.put("lastUpdate",mCurrentTimeZone);
-                    event.put("startTime",eventStartTime);
-                    event.put("endTime",eventEndTime);
-
-
-
-
-                    db.collection("events")
-                            .add(event)
-                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                @Override
-                                public void onSuccess(DocumentReference documentReference) {
-                                    Log.d(TAG, "Event has been added!");
-                                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.w(TAG,"Error adding event",e);
-                                }
-                            });
-                }
+                Event.addEventOnClick(CurrentUser.getUid(),
+                        startTimeHour,
+                        startTimeMin,
+                        endTimeHour,
+                        endTimeMin,
+                        name,
+                        description,
+                        zone,
+                        priority
+                        );
             }
         });
 
