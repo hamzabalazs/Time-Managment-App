@@ -83,8 +83,9 @@ public class Event {
             eventTitle.setError("Event title is required!");
             return;
         }
+        //Create event for code
         Event event1 = new Event(userUid, selectedDate, eventTitle.getText().toString().trim(), "Empty", eventStartTime, eventEndTime, priority1, zone2);
-        //Create an event
+        //Create an event as a map for the DB
         event.put("UID", userUid);
         event.put("Date", selectedDate);
         event.put("Title", eventTitle.getText().toString().trim());
