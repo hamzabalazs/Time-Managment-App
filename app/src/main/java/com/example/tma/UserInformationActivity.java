@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -55,6 +56,7 @@ public class UserInformationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(user!=null){
                     String email = CurrentUser.getEmail();
+                    String mUid = CurrentUser.getUid();
                     String mFirstName = firstname.getText().toString().trim();
                     String mLastName = lastname.getText().toString().trim();
                     String mZone = zone.getSelectedItem().toString();
@@ -68,13 +70,30 @@ public class UserInformationActivity extends AppCompatActivity {
                         return;
                     }
 
-
+                    CollectionReference users = db.collection("users");
                     user.put("Email",email);
                     user.put("First Name",mFirstName);
                     user.put("Last Name",mLastName);
                     user.put("Zone",mZone);
 
-                    db.collection("users")
+                    users.document(mUid).set(user)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Log.d(TAG, "User has been added!");
+                                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error adding document", e);
+                                }
+                            });
+
+
+
+                    /*db.collection("users")
                             .add(user)
                             .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                 @Override
@@ -89,7 +108,7 @@ public class UserInformationActivity extends AppCompatActivity {
                                     Log.w(TAG, "Error adding document", e);
                                 }
                             });
-
+*/
                 }
             }
         });

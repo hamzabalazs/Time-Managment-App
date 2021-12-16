@@ -7,6 +7,7 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/textView9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Welcome to dashboard"
@@ -32,11 +33,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/EventButton"
         android:layout_width="161dp"
         android:layout_height="86dp"
-        android:text="Button"
-        tools:layout_editor_absoluteX="125dp"
-        tools:layout_editor_absoluteY="322dp" />
+        android:layout_marginTop="48dp"
+        android:text="Add an event"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
