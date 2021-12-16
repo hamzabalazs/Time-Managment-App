@@ -87,7 +87,7 @@ public class Event {
         else{
             eventEndTime = endHour + ":" + endMin;
         }
-        
+
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String selectedDate = sdf.format(new Date(calendarDate.getDate()));
         Priority priority1 = Priority.NORMAL;
