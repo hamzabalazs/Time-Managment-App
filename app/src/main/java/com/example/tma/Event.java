@@ -42,9 +42,11 @@ public class Event {
     private Priority priorityLevel;
     private Zone zoneOfTheEvent;
     private String userUid;
+    private String selectedDate;
 
-    public Event(String userUid, String eventTitle, String eventDescription, String eventStartsAtDate, String eventEndsAtDate, Priority priorityLevel, Zone zoneOfTheEvent) {
+    public Event(String userUid, String selectedDate, String eventTitle, String eventDescription, String eventStartsAtDate, String eventEndsAtDate, Priority priorityLevel, Zone zoneOfTheEvent) {
         this.userUid = userUid;
+        this.selectedDate = selectedDate;
         this.eventTitle = eventTitle;
         this.eventDescription = eventDescription;
         this.eventCreatedOnTimestamp = new Date(System.currentTimeMillis());
@@ -54,20 +56,21 @@ public class Event {
         this.zoneOfTheEvent = zoneOfTheEvent;
     }
 
-    public static void addEventOnClick(String userUid, NumberPicker startTimeHour, NumberPicker startTimeMin, NumberPicker endTimeHour, NumberPicker endTimeMin, EditText eventTitle, EditText eventDescription, Spinner zone, Spinner priority) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+    public static void addEventOnClick(FirebaseFirestore db,String userUid, CalendarView calendarDate, NumberPicker startTimeHour, NumberPicker startTimeMin, NumberPicker endTimeHour, NumberPicker endTimeMin, EditText eventTitle, EditText eventDescription, Spinner zone, Spinner priority) {
         Map<String, Object> event = new HashMap<>();
         String eventStartTime = startTimeHour.getValue() + ":" + startTimeMin.getValue();
         String eventEndTime = endTimeHour.getValue() + ":" + endTimeMin.getValue();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String selectedDate = sdf.format(new Date(calendarDate.getDate()));
         Priority priority1 = Priority.NORMAL;
-        for(Priority priority2 : Priority.values()){
-            if(priority.getSelectedItem().toString().trim() == priority2.name()){
+        for (Priority priority2 : Priority.values()) {
+            if (priority.getSelectedItem().toString().trim() == priority2.name()) {
                 priority1 = priority2;
             }
         }
         Zone zone2 = Zone.CENTRU;
-        for(Zone zone1: Zone.values()){
-            if(zone.getSelectedItem().toString() == zone1.name()){
+        for (Zone zone1 : Zone.values()) {
+            if (zone.getSelectedItem().toString() == zone1.name()) {
                 zone2 = zone1;
             }
         }
@@ -80,15 +83,16 @@ public class Event {
             eventTitle.setError("Event title is required!");
             return;
         }
-        Event event1 = new Event(userUid,eventTitle.getText().toString().trim(),"Empty",eventStartTime,eventEndTime,priority1,zone2);
+        Event event1 = new Event(userUid, selectedDate, eventTitle.getText().toString().trim(), "Empty", eventStartTime, eventEndTime, priority1, zone2);
         //Create an event
         event.put("UID", userUid);
+        event.put("Date", selectedDate);
         event.put("Title", eventTitle.getText().toString().trim());
-        event.put("Description", eventDescription);
+        event.put("Description", eventDescription.getText().toString().trim());
         event.put("StartsAtDate", eventStartTime);
         event.put("EndsAtDate", eventEndTime);
-        event.put("zone", zone.getSelectedItem().toString().trim());
-        event.put("priority", priority.getSelectedItem().toString().trim());
+        event.put("zone", zone.getSelectedItem().toString());
+        event.put("priority", priority.getSelectedItem().toString());
         event.put("createdAtTimestamp", new Date(System.currentTimeMillis()));
 
         //Adding the created event to the db
@@ -167,5 +171,21 @@ public class Event {
 
     public void setEventEndsAtDate(String eventEndsAtDate) {
         this.eventEndsAtDate = eventEndsAtDate;
+    }
+
+    public String getUserUid() {
+        return userUid;
+    }
+
+    public void setUserUid(String userUid) {
+        this.userUid = userUid;
+    }
+
+    public String getSelectedDate() {
+        return selectedDate;
+    }
+
+    public void setSelectedDate(String selectedDate) {
+        this.selectedDate = selectedDate;
     }
 }

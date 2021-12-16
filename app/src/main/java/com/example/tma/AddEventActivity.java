@@ -36,10 +36,10 @@ import java.util.TimeZone;
 
 public class AddEventActivity extends AppCompatActivity {
 
-    Map<String, Object> event = new HashMap<>();
+    //Map<String, Object> event = new HashMap<>();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    NumberPicker startTimeHour,startTimeMin,endTimeHour,endTimeMin;
-    TextView startTimeTextView,endTimeTextView;
+    NumberPicker startTimeHour, startTimeMin, endTimeHour, endTimeMin;
+    TextView startTimeTextView, endTimeTextView;
     CalendarView calendarV;
     EditText name, description;
     Spinner zone, priority;
@@ -68,8 +68,8 @@ public class AddEventActivity extends AppCompatActivity {
         endTimeHour = findViewById(R.id.EndNumPickHour);
         endTimeMin = findViewById(R.id.EndNumPickMin);
 
-        zone.setAdapter(new ArrayAdapter<Zone>(this,R.layout.support_simple_spinner_dropdown_item,Zone.values()));
-        priority.setAdapter(new ArrayAdapter<Priority>(this,R.layout.support_simple_spinner_dropdown_item,Priority.values()));
+        zone.setAdapter(new ArrayAdapter<Zone>(this, R.layout.support_simple_spinner_dropdown_item, Zone.values()));
+        priority.setAdapter(new ArrayAdapter<Priority>(this, R.layout.support_simple_spinner_dropdown_item, Priority.values()));
 
         FirebaseUser CurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         calendarV.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -101,7 +101,10 @@ public class AddEventActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Event.addEventOnClick(CurrentUser.getUid(),
+
+                Event.addEventOnClick(db,
+                        CurrentUser.getUid(),
+                        calendarV,
                         startTimeHour,
                         startTimeMin,
                         endTimeHour,
@@ -110,7 +113,9 @@ public class AddEventActivity extends AppCompatActivity {
                         description,
                         zone,
                         priority
-                        );
+                );
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
             }
         });
 
