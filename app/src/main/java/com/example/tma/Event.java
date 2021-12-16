@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -54,6 +55,50 @@ public class Event {
         this.eventEndsAtDate = eventEndsAtDate;
         this.priorityLevel = priorityLevel;
         this.zoneOfTheEvent = zoneOfTheEvent;
+    }
+
+    public static class SortByPriority implements Comparator<Event> {
+
+        @Override
+        public int compare(Event e1, Event e2) {
+            if(e1.getPriorityLevel() == e2.getPriorityLevel()){
+                return 0;
+            }else{
+                if(e1.getPriorityLevel() == Priority.CRITICAL && e2.getPriorityLevel() != Priority.CRITICAL){
+                    return 1;
+                }else {
+                    if (e1.getPriorityLevel() == Priority.HIGH && e2.getPriorityLevel() != Priority.CRITICAL && e2.getPriorityLevel() != Priority.HIGH){
+                        return 1;
+                    }else{
+                        if(e1.getPriorityLevel() == Priority.NORMAL && e2.getPriorityLevel() != Priority.CRITICAL && e2.getPriorityLevel() != Priority.HIGH && e2.getPriorityLevel() != Priority.NORMAL ){
+                            return 1;
+                        }else{
+                            if(e1.getPriorityLevel() == Priority.LOW && e2.getPriorityLevel() != Priority.LOW){
+                                return -1;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if(e2.getPriorityLevel() == Priority.CRITICAL && e1.getPriorityLevel() != Priority.CRITICAL){
+                return -1;
+            }else {
+                if (e2.getPriorityLevel() == Priority.HIGH && e1.getPriorityLevel() != Priority.CRITICAL && e1.getPriorityLevel() != Priority.HIGH){
+                    return -1;
+                }else{
+                    if(e2.getPriorityLevel() == Priority.NORMAL && e1.getPriorityLevel() != Priority.CRITICAL && e1.getPriorityLevel() != Priority.HIGH && e1.getPriorityLevel() != Priority.NORMAL ){
+                        return -1;
+                    }else{
+                        if(e2.getPriorityLevel() == Priority.LOW && e1.getPriorityLevel() != Priority.LOW){
+                            return 1;
+                        }
+                    }
+                }
+            }
+            return 0;
+        }
+
     }
 
     public static void addEventOnClick(FirebaseFirestore db,String userUid, CalendarView calendarDate, NumberPicker startTimeHour, NumberPicker startTimeMin, NumberPicker endTimeHour, NumberPicker endTimeMin, EditText eventTitle, EditText eventDescription, Spinner zone, Spinner priority) {
