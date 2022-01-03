@@ -103,8 +103,36 @@ public class Event {
 
     public static void addEventOnClick(FirebaseFirestore db,String userUid, CalendarView calendarDate, NumberPicker startTimeHour, NumberPicker startTimeMin, NumberPicker endTimeHour, NumberPicker endTimeMin, EditText eventTitle, EditText eventDescription, Spinner zone, Spinner priority) {
         Map<String, Object> event = new HashMap<>();
-        String eventStartTime = startTimeHour.getValue() + ":" + startTimeMin.getValue();
-        String eventEndTime = endTimeHour.getValue() + ":" + endTimeMin.getValue();
+        String eventStartTime,eventEndTime;
+        int startMin = startTimeMin.getValue();
+        int startHour = startTimeHour.getValue();
+        int endMin = endTimeMin.getValue();
+        int endHour = endTimeHour.getValue();
+        if(startMin < 10 && startHour < 10){
+            eventStartTime = "0" + startHour + ":0" + startMin;
+        }
+        else if(startMin < 10 && startHour >= 10){
+            eventStartTime = startHour + ":0" + startMin;
+        }
+        else if(startMin >= 10 && startHour < 10){
+            eventStartTime = "0" + startHour + ":" + startMin;
+        }
+        else{
+            eventStartTime = startHour + ":" + startMin;
+        }
+        if(endMin < 10 && endHour < 10){
+            eventEndTime = "0" + endHour + ":0" + endMin;
+        }
+        else if(endMin < 10 && endHour >= 10){
+            eventEndTime = endHour + ":0" + endMin;
+        }
+        else if(endMin >= 10 && endHour < 10){
+            eventEndTime = "0" + endHour + ":" + endMin;
+        }
+        else{
+            eventEndTime = endHour + ":" + endMin;
+        }
+
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String selectedDate = sdf.format(new Date(calendarDate.getDate()));
         Priority priority1 = Priority.NORMAL;

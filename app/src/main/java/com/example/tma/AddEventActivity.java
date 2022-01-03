@@ -67,6 +67,7 @@ public class AddEventActivity extends AppCompatActivity {
         endTimeTextView = findViewById(R.id.endTimeText);
         endTimeHour = findViewById(R.id.EndNumPickHour);
         endTimeMin = findViewById(R.id.EndNumPickMin);
+        calendarV.setMinDate(calendarV.getDate());
 
         zone.setAdapter(new ArrayAdapter<Zone>(this, R.layout.support_simple_spinner_dropdown_item, Zone.values()));
         priority.setAdapter(new ArrayAdapter<Priority>(this, R.layout.support_simple_spinner_dropdown_item, Priority.values()));
