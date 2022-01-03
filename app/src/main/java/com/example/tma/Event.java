@@ -174,9 +174,9 @@ public class Event {
         event.put("EndsAtDate", eventEndTime);
         event.put("zone", zone.getSelectedItem().toString());
         event.put("priority", priority.getSelectedItem().toString());
-        event.put("createdAtTimestamp", new Date(System.currentTimeMillis()));
+        event.put("createdAtTimestamp", new Date());
 
-        //Adding the created event to the db
+    //Adding the created event to the db
         db.collection("events")
                 .add(event)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

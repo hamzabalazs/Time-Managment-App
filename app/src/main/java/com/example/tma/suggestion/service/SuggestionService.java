@@ -16,10 +16,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.core.QueryListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,15 +33,66 @@ public class SuggestionService {
     private List<Event> events;
     final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    public SuggestionService(List<Event> events, FirebaseUser currentUser) {
+    private String eventId;
+    private String eventTitle;
+    private String eventDescription;
+    private Date eventCreatedOnTimestamp;
+    private String eventStartsAtDate;
+    private String eventEndsAtDate;
+    private Priority priorityLevel;
+    private Zone zoneOfTheEvent;
+    private String userUid;
+    private String selectedDate;
+
+    public SuggestionService(FirebaseUser currentUser) {
         DocumentReference docRef = db.collection("events").document(currentUser.getUid());
 //        Event event = new Event(currentUser.getUid(),currentUser.getEventTitle,currentUser.getEventDescription,currentUser.getEventStartsAtDate,currentUser.getEventEndsAtDate,currentUser.)
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        for (Map.Entry<String, Object> dataMap : document.getData().entrySet()) {
+                            String key = dataMap.getKey();
+                            String value = (String) dataMap.getValue();
+                            switch (key) {
+                                case "UID":
+                                    userUid = value;
+                                    break;
+                                case "StartsAtDate":
+                                    eventStartsAtDate = value;
+                                    break;
+                                case "EndsAtDate":
+                                    eventEndsAtDate = value;
+                                    break;
+                                case "Date":
+                                    selectedDate = value;
+                                    break;
+                                case "Title":
+                                    eventTitle = value;
+                                    break;
+                                case "Description":
+                                    eventDescription = value;
+                                    break;
+                                case "zone": zoneOfTheEvent = Zone.valueOf(value);
+                                    break;
+                                case "priority": priorityLevel = Priority.valueOf(value);
+                                    break;
+                                case "createdAtTimestamp": eventCreatedOnTimestamp = new Date(value);
+                                    break;
+                            }
+                            Event event = new Event(userUid,selectedDate,eventTitle,eventDescription,eventStartsAtDate,eventEndsAtDate,priorityLevel,zoneOfTheEvent);
+                            events.add(event);
+                        }
+                    } else {
+                        System.out.println("No such document");
+                    }
+                } else {
+                    System.out.println("Task failed with " + task.getException());
+                }
             }
         });
-        this.events = events;
     }
 
 
@@ -110,7 +163,25 @@ public class SuggestionService {
     //if it's true it sorts the events only in the zones for every zone which will help for the sortByZone() method.
     public void sortByStartTime(Boolean sortByTimeInZones) {
         if (sortByTimeInZones) {
-            
+            List<Event> eventsSortedByTime = Collections.emptyList();
+
+            //sort the whole list of events
+            sortByZone();
+            Zone zone = events.get(0).getZoneOfTheEvent();
+            for (int i = 0; i < events.size(); i++) {
+                int helpIndexEnd = 0;
+                int helpIndexStart = 0;
+                if (events.get(i).getZoneOfTheEvent() != events.get(i + 1).getZoneOfTheEvent()) {
+                    helpIndexEnd = i;
+                    List<Event> helperListOfEvents = events.subList(helpIndexStart, helpIndexEnd);
+                    Collections.sort(helperListOfEvents, new Event.SortByStartTime());
+                    eventsSortedByTime.addAll(helperListOfEvents);
+                    helpIndexStart = i + 1;
+
+                }
+            }
+            events.clear();
+            events.addAll(eventsSortedByTime);
         } else {
             Collections.sort(events, new Event.SortByStartTime());
         }
