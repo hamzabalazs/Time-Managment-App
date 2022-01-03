@@ -33,6 +33,10 @@ public class SuggestionService {
     private List<Event> events;
     final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    public List<Event> getEvents() {
+        return events;
+    }
+
     private String eventId;
     private String eventTitle;
     private String eventDescription;
