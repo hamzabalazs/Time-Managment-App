@@ -101,6 +101,13 @@ public class Event {
 
     }
 
+    public static class SortByStartTime implements Comparator<Event>{
+        @Override
+        public int compare(Event event, Event t1) {
+            return t1.eventStartsAtDate.compareToIgnoreCase(event.eventStartsAtDate);
+        }
+    }
+
     public static void addEventOnClick(FirebaseFirestore db,String userUid, CalendarView calendarDate, NumberPicker startTimeHour, NumberPicker startTimeMin, NumberPicker endTimeHour, NumberPicker endTimeMin, EditText eventTitle, EditText eventDescription, Spinner zone, Spinner priority) {
         Map<String, Object> event = new HashMap<>();
         String eventStartTime = startTimeHour.getValue() + ":" + startTimeMin.getValue();

@@ -28,10 +28,10 @@ import java.util.logging.Logger;
 
 //The suggestion service is giving suggestions to the user, taking in consideration the zone and the priority of the event
 public class SuggestionService {
-    private final List<Event> events;
+    private List<Event> events;
     final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    public SuggestionService(List<Event> events,FirebaseUser currentUser) {
+    public SuggestionService(List<Event> events, FirebaseUser currentUser) {
         DocumentReference docRef = db.collection("events").document(currentUser.getUid());
 //        Event event = new Event(currentUser.getUid(),currentUser.getEventTitle,currentUser.getEventDescription,currentUser.getEventStartsAtDate,currentUser.getEventEndsAtDate,currentUser.)
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -104,6 +104,16 @@ public class SuggestionService {
         events.clear();
         events.addAll(eventListSortedByZones);
 
+    }
+
+    //If the parameter passed is false it means that the method sorts the whole list of events by starting time
+    //if it's true it sorts the events only in the zones for every zone which will help for the sortByZone() method.
+    public void sortByStartTime(Boolean sortByTimeInZones) {
+        if (sortByTimeInZones) {
+            
+        } else {
+            Collections.sort(events, new Event.SortByStartTime());
+        }
     }
 }
 
