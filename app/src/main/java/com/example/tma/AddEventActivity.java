@@ -95,7 +95,6 @@ public class AddEventActivity extends AppCompatActivity {
                 endTimeHour.setMaxValue(23);
                 endTimeMin.setMinValue(0);
                 endTimeMin.setMaxValue(59);
-                
 
             }
         });
