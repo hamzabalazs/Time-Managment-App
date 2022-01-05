@@ -105,7 +105,7 @@ public class Event {
     public static class SortByStartTime implements Comparator<Event>{
         @Override
         public int compare(Event event, Event t1) {
-            return t1.eventStartsAtDate.compareToIgnoreCase(event.eventStartsAtDate);
+            return -1*t1.eventStartsAtDate.compareToIgnoreCase(event.eventStartsAtDate);
         }
     }
 

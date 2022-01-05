@@ -30,7 +30,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.logging.Logger;
 
 //The suggestion service is giving suggestions to the user, taking in consideration the zone and the priority of the event
@@ -43,7 +42,8 @@ public class SuggestionService {
     public SuggestionService(String UID) {
         getEventsFromDb(UID);
     }
-    public void getEventsFromDb(String UID){
+
+    public void getEventsFromDb(String UID) {
         db.collection("events").whereEqualTo("UID", UID)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -63,8 +63,8 @@ public class SuggestionService {
                         Event event = new Event(eventId, UID, selectedDate, title, description, startDate, endDate, priorityLevel, zoneOfTheEvent);
                         events.add(event);
                     }
-                }else{
-                    if(task.isComplete()){
+                } else {
+                    if (task.isComplete()) {
                         System.out.println("Creating event done");
                     }
                 }
@@ -80,42 +80,41 @@ public class SuggestionService {
     //Sorts the events by zones and within the zone by priority
     public void sortByZone(List<Event> eventsToSort) {
         HashMap<Zone, List<Event>> eventsInZones = new HashMap<>();
-        List<Event> nullListOfEvent = Collections.emptyList();
 
         //sort all the events by priority so the events will be added to the list by zones already sorted
         sortEventsByPriority(eventsToSort);
 
         //Initialize for every zone an emptyList
-        eventsInZones.put(Zone.TUDOR, nullListOfEvent);
-        eventsInZones.put(Zone.LIBERTATII, nullListOfEvent);
-        eventsInZones.put(Zone.DAMBU, nullListOfEvent);
-        eventsInZones.put(Zone.UNIRII, nullListOfEvent);
-        eventsInZones.put(Zone.SAPTENOIEMBRIE, nullListOfEvent);
-        eventsInZones.put(Zone.MURESENI, nullListOfEvent);
-        eventsInZones.put(Zone.CENTRU, nullListOfEvent);
+        eventsInZones.put(Zone.TUDOR, new ArrayList<Event>());
+        eventsInZones.put(Zone.LIBERTATII, new ArrayList<Event>());
+        eventsInZones.put(Zone.DAMBU, new ArrayList<Event>());
+        eventsInZones.put(Zone.UNIRII, new ArrayList<Event>());
+        eventsInZones.put(Zone.SAPTENOIEMBRIE, new ArrayList<Event>());
+        eventsInZones.put(Zone.MURESENI, new ArrayList<Event>());
+        eventsInZones.put(Zone.CENTRU, new ArrayList<Event>());
 
         for (Event zoneEvent : eventsToSort) {
             switch (zoneEvent.getZoneOfTheEvent()) {
                 case TUDOR:
-                    Objects.requireNonNull(eventsInZones.get(Zone.TUDOR)).add(zoneEvent);
+                    eventsInZones.get(Zone.TUDOR).add(zoneEvent);
                     break;
                 case LIBERTATII:
-                    Objects.requireNonNull(eventsInZones.get(Zone.LIBERTATII)).add(zoneEvent);
+                    eventsInZones.get(Zone.LIBERTATII).add(zoneEvent);
                     break;
                 case DAMBU:
-                    Objects.requireNonNull(eventsInZones.get(Zone.DAMBU)).add(zoneEvent);
+                    eventsInZones.get(Zone.DAMBU).add(zoneEvent);
                     break;
                 case UNIRII:
-                    Objects.requireNonNull(eventsInZones.get(Zone.UNIRII)).add(zoneEvent);
+                    eventsInZones.get(Zone.UNIRII).add(zoneEvent);
                     break;
                 case SAPTENOIEMBRIE:
-                    Objects.requireNonNull(eventsInZones.get(Zone.SAPTENOIEMBRIE)).add(zoneEvent);
+                    eventsInZones.get(Zone.SAPTENOIEMBRIE).add(zoneEvent);
                     break;
                 case MURESENI:
-                    Objects.requireNonNull(eventsInZones.get(Zone.MURESENI)).add(zoneEvent);
+                    eventsInZones.get(Zone.MURESENI).add(zoneEvent);
                     break;
                 case CENTRU:
-                    Objects.requireNonNull(eventsInZones.get(Zone.CENTRU)).add(zoneEvent);
+                    eventsInZones.get(Zone.CENTRU).add(zoneEvent);
                     break;
                 default:
                     System.out.println("Invalid zone for an event");
@@ -137,34 +136,37 @@ public class SuggestionService {
 
     //If the parameter passed is false it means that the method sorts the whole list of events by starting time
     //if it's true it sorts the events only in the zones for every zone which will help for the sortByZone() method.
-    public void sortByStartTime(Boolean sortByTimeInZones,List<Event> eventsToSort) {
+    public void sortByStartTime(Boolean sortByTimeInZones, List<Event> eventsToSort) {
         if (sortByTimeInZones) {
-            List<Event> eventsSortedByTime = Collections.emptyList();
-
+            List<Event> eventsSortedByTime = new ArrayList<Event>();
+            int helpIndexEnd = 0;
+            int helpIndexStart = 0;
             //sort the whole list of events
             sortByZone(eventsToSort);
-            Zone zone = events.get(0).getZoneOfTheEvent();
-            for (int i = 0; i < eventsToSort.size(); i++) {
-                int helpIndexEnd = 0;
-                int helpIndexStart = 0;
-                if (eventsToSort.get(i).getZoneOfTheEvent() != eventsToSort.get(i + 1).getZoneOfTheEvent()) {
+            for (int i = 0; i < eventsToSort.size() - 1; i++) {
+                if (eventsToSort.get(i).getZoneOfTheEvent() == eventsToSort.get(i + 1).getZoneOfTheEvent()) {
+                    continue;
+                } else {
                     helpIndexEnd = i;
                     List<Event> helperListOfEvents = eventsToSort.subList(helpIndexStart, helpIndexEnd);
                     Collections.sort(helperListOfEvents, new Event.SortByStartTime());
                     eventsSortedByTime.addAll(helperListOfEvents);
                     helpIndexStart = i + 1;
-
                 }
             }
-            eventsToSort.clear();
-            eventsToSort.addAll(eventsSortedByTime);
+            if (helpIndexStart != 0) {
+                eventsToSort.clear();
+                eventsToSort.addAll(eventsSortedByTime);
+            } else {
+                Collections.sort(eventsToSort, new Event.SortByStartTime());
+            }
         } else {
             Collections.sort(eventsToSort, new Event.SortByStartTime());
         }
     }
 
-    public static SuggestionService getSuggestionService(String UID){
-        return  new SuggestionService(UID);
+    public static SuggestionService getSuggestionService(String UID) {
+        return new SuggestionService(UID);
     }
 
     public List<Event> getEvents() {
