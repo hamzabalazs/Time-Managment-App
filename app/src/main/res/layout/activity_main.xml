@@ -34,11 +34,11 @@
 
     <Button
         android:id="@+id/EventButton"
-        android:layout_width="118dp"
+        android:layout_width="130dp"
         android:layout_height="40dp"
         android:text="Add event"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.054"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/welcomeTextView" />
 
@@ -72,11 +72,20 @@
 
     <Button
         android:id="@+id/userInfoButton"
-        android:layout_width="118dp"
+        android:layout_width="130dp"
         android:layout_height="40dp"
         android:layout_marginStart="12dp"
         android:text="User info"
         app:layout_constraintStart_toEndOf="@+id/EventButton"
+        app:layout_constraintTop_toBottomOf="@+id/welcomeTextView" />
+
+    <Button
+        android:id="@+id/eventInfoButton"
+        android:layout_width="130dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="12dp"
+        android:text="All events"
+        app:layout_constraintStart_toEndOf="@+id/userInfoButton"
         app:layout_constraintTop_toBottomOf="@+id/welcomeTextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
