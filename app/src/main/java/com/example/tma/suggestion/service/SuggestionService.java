@@ -36,68 +36,8 @@ import java.util.logging.Logger;
 public class SuggestionService {
     private List<Event> events = Collections.synchronizedList(new ArrayList<Event>());
     final FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-
     private Priority priorityLevel;
     private Zone zoneOfTheEvent;
-
-
-
-    /*public void setEvents(FirebaseUser currentUser,List<Event> eventek){
-        CollectionReference eventRef = db.collection("events");
-//        Event event = new Event(currentUser.getUid(),currentUser.getEventTitle,currentUser.getEventDescription,currentUser.getEventStartsAtDate,currentUser.getEventEndsAtDate,currentUser.)
-        eventRef.whereEqualTo("UID",currentUser.getUid())
-                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(QueryDocumentSnapshot docsnap : queryDocumentSnapshots){
-
-
-                    String selectedDate = docsnap.get("Date").toString();
-                    String title = docsnap.get("Title").toString();
-                    String startDate = docsnap.get("StartsAtDate").toString();
-                    String endDate = docsnap.get("EndsAtDate").toString();
-                    String description = docsnap.get("Description").toString();
-                    String priority = docsnap.get("priority").toString();
-                    String zone = docsnap.get("zone").toString();
-                    priorityLevel = Priority.valueOf(priority);
-                    zoneOfTheEvent = Zone.valueOf(zone);
-                    Event event = new Event(currentUser.getUid(),selectedDate,title,description,startDate,endDate,priorityLevel,zoneOfTheEvent);
-                    eventek.add(event);
-                }
-            }
-        });
-
-    }
-
-     */
-
-//    public SuggestionService(String UID) {
-//
-//        db.collection("events").whereEqualTo("UID",UID)
-//                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//            @Override
-//            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//                for (QueryDocumentSnapshot docsnap : queryDocumentSnapshots) {
-//                    String eventId = docsnap.getId();
-//                    String selectedDate = docsnap.get("Date").toString();
-//                    String title = docsnap.get("Title").toString();
-//                    String startDate = docsnap.get("StartsAtDate").toString();
-//                    String endDate = docsnap.get("EndsAtDate").toString();
-//                    String description = docsnap.get("Description").toString();
-//                    String priority = docsnap.get("priority").toString();
-//                    String zone = docsnap.get("zone").toString();
-//                    priorityLevel = Priority.valueOf(priority);
-//                    zoneOfTheEvent = Zone.valueOf(zone);
-//                    Event event = new Event(eventId,UID, selectedDate, title, description, startDate, endDate, priorityLevel, zoneOfTheEvent);
-//                    events.add(event);
-//                }
-//            }
-//        });
-//
-//
-//
-//    }
 
     public SuggestionService(String UID) {
         getEventsFromDb(UID);
