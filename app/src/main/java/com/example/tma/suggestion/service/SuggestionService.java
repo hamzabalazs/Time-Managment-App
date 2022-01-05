@@ -77,12 +77,12 @@ public class SuggestionService {
     }
 
     //Sorts the events by zones and within the zone by priority
-    public void sortByZone() {
+    public void sortByZone(List<Event> eventsToSort) {
         HashMap<Zone, List<Event>> eventsInZones = new HashMap<>();
         List<Event> nullListOfEvent = Collections.emptyList();
 
         //sort all the events by priority so the events will be added to the list by zones already sorted
-        sortEventsByPriority(events);
+        sortEventsByPriority(eventsToSort);
 
         //Initialize for every zone an emptyList
         eventsInZones.put(Zone.TUDOR, nullListOfEvent);
@@ -93,7 +93,7 @@ public class SuggestionService {
         eventsInZones.put(Zone.MURESENI, nullListOfEvent);
         eventsInZones.put(Zone.CENTRU, nullListOfEvent);
 
-        for (Event zoneEvent : events) {
+        for (Event zoneEvent : eventsToSort) {
             switch (zoneEvent.getZoneOfTheEvent()) {
                 case TUDOR:
                     eventsInZones.get(Zone.TUDOR).add(zoneEvent);
@@ -129,36 +129,36 @@ public class SuggestionService {
         }
 
         //Delete the unsorted events from the list and add the sorted one to it instead.
-        events.clear();
-        events.addAll(eventListSortedByZones);
+        eventsToSort.clear();
+        eventsToSort.addAll(eventListSortedByZones);
 
     }
 
     //If the parameter passed is false it means that the method sorts the whole list of events by starting time
     //if it's true it sorts the events only in the zones for every zone which will help for the sortByZone() method.
-    public void sortByStartTime(Boolean sortByTimeInZones) {
+    public void sortByStartTime(Boolean sortByTimeInZones,List<Event> eventsToSort) {
         if (sortByTimeInZones) {
             List<Event> eventsSortedByTime = Collections.emptyList();
 
             //sort the whole list of events
-            sortByZone();
+            sortByZone(eventsToSort);
             Zone zone = events.get(0).getZoneOfTheEvent();
-            for (int i = 0; i < events.size(); i++) {
+            for (int i = 0; i < eventsToSort.size(); i++) {
                 int helpIndexEnd = 0;
                 int helpIndexStart = 0;
-                if (events.get(i).getZoneOfTheEvent() != events.get(i + 1).getZoneOfTheEvent()) {
+                if (eventsToSort.get(i).getZoneOfTheEvent() != eventsToSort.get(i + 1).getZoneOfTheEvent()) {
                     helpIndexEnd = i;
-                    List<Event> helperListOfEvents = events.subList(helpIndexStart, helpIndexEnd);
+                    List<Event> helperListOfEvents = eventsToSort.subList(helpIndexStart, helpIndexEnd);
                     Collections.sort(helperListOfEvents, new Event.SortByStartTime());
                     eventsSortedByTime.addAll(helperListOfEvents);
                     helpIndexStart = i + 1;
 
                 }
             }
-            events.clear();
-            events.addAll(eventsSortedByTime);
+            eventsToSort.clear();
+            eventsToSort.addAll(eventsSortedByTime);
         } else {
-            Collections.sort(events, new Event.SortByStartTime());
+            Collections.sort(eventsToSort, new Event.SortByStartTime());
         }
     }
 
