@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/holo_blue_light"
     tools:context=".EventInfoActivity">
 
 
@@ -11,17 +12,9 @@
         android:id="@+id/sortByTimeView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
         android:onClick="sortByTime"
         android:text="Sort by time!"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sortByZoneTimeView" />
-
-    <TextView
-        android:id="@+id/sortByZoneTimeView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="sortByTimeAndZone"
-        android:text="Sort by zone and time!"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sortByZonePriorityView" />
 
@@ -30,6 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:fontFamily="@font/lato"
         android:text="Your events"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,6 +34,7 @@
         android:id="@+id/sortByPriorityView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
         android:onClick="sortByPriority"
         android:text="Sort by priority!"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,6 +44,7 @@
         android:id="@+id/sortByZonePriorityView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
         android:onClick="sortByZoneAndPriority"
         android:text="Sort by zone, then priority!"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,10 +52,14 @@
 
     <TextView
         android:id="@+id/eventListView"
-        android:layout_width="409dp"
-        android:layout_height="609dp"
-        android:text="@string/defaultString"
+        android:layout_width="405dp"
+        android:layout_height="448dp"
+        android:layout_marginTop="28dp"
+        android:fontFamily="@font/lato"
         android:scrollbars="vertical"
+        android:text="@string/defaultString"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sortByTimeView" />
@@ -69,6 +69,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
+        android:fontFamily="@font/lato"
         android:onClick="BacktoMain"
         android:text="Back"
         app:layout_constraintEnd_toEndOf="parent"

@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/holo_blue_light"
     tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/textView9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
         android:text="Dashboard"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:fontFamily="@font/lato"
         android:minWidth="48dp"
         android:minHeight="48dp"
         android:onClick="logout"
@@ -36,6 +39,8 @@
         android:id="@+id/EventButton"
         android:layout_width="118dp"
         android:layout_height="40dp"
+        android:backgroundTint="@android:color/holo_red_light"
+        android:fontFamily="@font/lato"
         android:text="Add event"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.054"
@@ -48,6 +53,7 @@
         android:layout_height="32dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="36dp"
+        android:fontFamily="@font/lato"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
@@ -57,17 +63,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:fontFamily="@font/lato"
         android:text="Tasks for today"
+        android:textColor="@android:color/white"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/EventButton" />
 
     <TextView
         android:id="@+id/currTaskTextView"
-        android:layout_width="384dp"
-        android:layout_height="566dp"
+        android:layout_width="385dp"
+        android:layout_height="481dp"
         android:layout_marginStart="16dp"
+        android:textColor="@android:color/white"
+        android:fontFamily="@font/lato"
         android:scrollbars="vertical"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
@@ -76,6 +87,8 @@
         android:layout_width="118dp"
         android:layout_height="40dp"
         android:layout_marginStart="12dp"
+        android:backgroundTint="@android:color/holo_red_light"
+        android:fontFamily="@font/lato"
         android:text="User info"
         app:layout_constraintStart_toEndOf="@+id/EventButton"
         app:layout_constraintTop_toBottomOf="@+id/welcomeTextView" />
@@ -85,6 +98,8 @@
         android:layout_width="130dp"
         android:layout_height="40dp"
         android:layout_marginStart="12dp"
+        android:backgroundTint="@android:color/holo_red_light"
+        android:fontFamily="@font/lato"
         android:text="All events"
         app:layout_constraintStart_toEndOf="@+id/userInfoButton"
         app:layout_constraintTop_toBottomOf="@+id/welcomeTextView" />
