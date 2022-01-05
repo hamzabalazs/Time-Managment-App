@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 //The suggestion service is giving suggestions to the user, taking in consideration the zone and the priority of the event
@@ -96,25 +97,25 @@ public class SuggestionService {
         for (Event zoneEvent : eventsToSort) {
             switch (zoneEvent.getZoneOfTheEvent()) {
                 case TUDOR:
-                    eventsInZones.get(Zone.TUDOR).add(zoneEvent);
+                    Objects.requireNonNull(eventsInZones.get(Zone.TUDOR)).add(zoneEvent);
                     break;
                 case LIBERTATII:
-                    eventsInZones.get(Zone.LIBERTATII).add(zoneEvent);
+                    Objects.requireNonNull(eventsInZones.get(Zone.LIBERTATII)).add(zoneEvent);
                     break;
                 case DAMBU:
-                    eventsInZones.get(Zone.DAMBU).add(zoneEvent);
+                    Objects.requireNonNull(eventsInZones.get(Zone.DAMBU)).add(zoneEvent);
                     break;
                 case UNIRII:
-                    eventsInZones.get(Zone.UNIRII).add(zoneEvent);
+                    Objects.requireNonNull(eventsInZones.get(Zone.UNIRII)).add(zoneEvent);
                     break;
                 case SAPTENOIEMBRIE:
-                    eventsInZones.get(Zone.SAPTENOIEMBRIE).add(zoneEvent);
+                    Objects.requireNonNull(eventsInZones.get(Zone.SAPTENOIEMBRIE)).add(zoneEvent);
                     break;
                 case MURESENI:
-                    eventsInZones.get(Zone.MURESENI).add(zoneEvent);
+                    Objects.requireNonNull(eventsInZones.get(Zone.MURESENI)).add(zoneEvent);
                     break;
                 case CENTRU:
-                    eventsInZones.get(Zone.CENTRU).add(zoneEvent);
+                    Objects.requireNonNull(eventsInZones.get(Zone.CENTRU)).add(zoneEvent);
                     break;
                 default:
                     System.out.println("Invalid zone for an event");
