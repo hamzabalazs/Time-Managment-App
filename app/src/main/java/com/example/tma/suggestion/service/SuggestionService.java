@@ -6,13 +6,17 @@ import com.example.tma.Event;
 import com.example.tma.Priority;
 import com.example.tma.Zone;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.core.QueryListener;
 
@@ -30,74 +34,74 @@ import java.util.logging.Logger;
 
 //The suggestion service is giving suggestions to the user, taking in consideration the zone and the priority of the event
 public class SuggestionService {
-    private List<Event> events;
+    private List<Event> events = new ArrayList<Event>();
     final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    public List<Event> getEvents() {
-        return events;
-    }
 
-    private String eventId;
-    private String eventTitle;
-    private String eventDescription;
-    private Date eventCreatedOnTimestamp;
-    private String eventStartsAtDate;
-    private String eventEndsAtDate;
+
+
     private Priority priorityLevel;
     private Zone zoneOfTheEvent;
-    private String userUid;
-    private String selectedDate;
 
-    public SuggestionService(FirebaseUser currentUser) {
-        DocumentReference docRef = db.collection("events").document(currentUser.getUid());
+
+
+    /*public void setEvents(FirebaseUser currentUser,List<Event> eventek){
+        CollectionReference eventRef = db.collection("events");
 //        Event event = new Event(currentUser.getUid(),currentUser.getEventTitle,currentUser.getEventDescription,currentUser.getEventStartsAtDate,currentUser.getEventEndsAtDate,currentUser.)
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        eventRef.whereEqualTo("UID",currentUser.getUid())
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        for (Map.Entry<String, Object> dataMap : document.getData().entrySet()) {
-                            String key = dataMap.getKey();
-                            String value = (String) dataMap.getValue();
-                            switch (key) {
-                                case "UID":
-                                    userUid = value;
-                                    break;
-                                case "StartsAtDate":
-                                    eventStartsAtDate = value;
-                                    break;
-                                case "EndsAtDate":
-                                    eventEndsAtDate = value;
-                                    break;
-                                case "Date":
-                                    selectedDate = value;
-                                    break;
-                                case "Title":
-                                    eventTitle = value;
-                                    break;
-                                case "Description":
-                                    eventDescription = value;
-                                    break;
-                                case "zone": zoneOfTheEvent = Zone.valueOf(value);
-                                    break;
-                                case "priority": priorityLevel = Priority.valueOf(value);
-                                    break;
-                                case "createdAtTimestamp": eventCreatedOnTimestamp = new Date(value);
-                                    break;
-                            }
-                            Event event = new Event(userUid,selectedDate,eventTitle,eventDescription,eventStartsAtDate,eventEndsAtDate,priorityLevel,zoneOfTheEvent);
-                            events.add(event);
-                        }
-                    } else {
-                        System.out.println("No such document");
-                    }
-                } else {
-                    System.out.println("Task failed with " + task.getException());
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot docsnap : queryDocumentSnapshots){
+
+
+                    String selectedDate = docsnap.get("Date").toString();
+                    String title = docsnap.get("Title").toString();
+                    String startDate = docsnap.get("StartsAtDate").toString();
+                    String endDate = docsnap.get("EndsAtDate").toString();
+                    String description = docsnap.get("Description").toString();
+                    String priority = docsnap.get("priority").toString();
+                    String zone = docsnap.get("zone").toString();
+                    priorityLevel = Priority.valueOf(priority);
+                    zoneOfTheEvent = Zone.valueOf(zone);
+                    Event event = new Event(currentUser.getUid(),selectedDate,title,description,startDate,endDate,priorityLevel,zoneOfTheEvent);
+                    eventek.add(event);
                 }
             }
         });
+
     }
+
+     */
+
+    public SuggestionService(String UID) {
+
+        db.collection("events").whereEqualTo("UID",UID)
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (QueryDocumentSnapshot docsnap : queryDocumentSnapshots) {
+                    String eventId = docsnap.getId();
+                    String selectedDate = docsnap.get("Date").toString();
+                    String title = docsnap.get("Title").toString();
+                    String startDate = docsnap.get("StartsAtDate").toString();
+                    String endDate = docsnap.get("EndsAtDate").toString();
+                    String description = docsnap.get("Description").toString();
+                    String priority = docsnap.get("priority").toString();
+                    String zone = docsnap.get("zone").toString();
+                    priorityLevel = Priority.valueOf(priority);
+                    zoneOfTheEvent = Zone.valueOf(zone);
+                    Event event = new Event(eventId,UID, selectedDate, title, description, startDate, endDate, priorityLevel, zoneOfTheEvent);
+                    events.add(event);
+                }
+            }
+        });
+
+
+
+    }
+
+
 
 
     //Sorts the events(higher priority first)
@@ -189,6 +193,9 @@ public class SuggestionService {
         } else {
             Collections.sort(events, new Event.SortByStartTime());
         }
+    }
+    public List<Event> getEvents() {
+        return events;
     }
 }
 

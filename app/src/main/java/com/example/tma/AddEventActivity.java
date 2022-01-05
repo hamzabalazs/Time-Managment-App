@@ -104,6 +104,7 @@ public class AddEventActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Event.addEventOnClick(db,
+
                         CurrentUser.getUid(),
                         calendarV,
                         startTimeHour,

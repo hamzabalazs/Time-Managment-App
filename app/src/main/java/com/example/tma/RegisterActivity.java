@@ -17,10 +17,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class RegisterActivity extends AppCompatActivity {
 
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
     TextView loginbtn;
     EditText mEmail, mPassword;
     Button registerbtn;
@@ -41,9 +46,29 @@ public class RegisterActivity extends AppCompatActivity {
         progressbar = findViewById(R.id.progressBar);
 
 
-        if(fAuth.getCurrentUser() != null){
-            startActivity(new Intent(getApplicationContext(),MainActivity.class));
-            finish();
+
+
+        if(currentUser != null){
+            db.collection("users").document(currentUser.getUid())
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if(task.isSuccessful()){
+                                DocumentSnapshot docsnap = task.getResult();
+                                if(docsnap.exists()){
+                                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                                    finish();
+                                }
+                                else{
+                                    startActivity(new Intent(getApplicationContext(),UserInformationActivity.class));
+                                    finish();
+                                }
+                            }
+                        }
+                    });
+
+
         }
 
 

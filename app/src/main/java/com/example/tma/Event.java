@@ -45,7 +45,8 @@ public class Event {
     private String userUid;
     private String selectedDate;
 
-    public Event(String userUid, String selectedDate, String eventTitle, String eventDescription, String eventStartsAtDate, String eventEndsAtDate, Priority priorityLevel, Zone zoneOfTheEvent) {
+    public Event(String eventId,String userUid, String selectedDate, String eventTitle, String eventDescription, String eventStartsAtDate, String eventEndsAtDate, Priority priorityLevel, Zone zoneOfTheEvent) {
+        this.eventId = eventId;
         this.userUid = userUid;
         this.selectedDate = selectedDate;
         this.eventTitle = eventTitle;
@@ -163,8 +164,7 @@ public class Event {
             eventTitle.setError("Event title is required!");
             return;
         }
-        //Create event for code
-        Event event1 = new Event(userUid, selectedDate, eventTitle.getText().toString().trim(), "Empty", eventStartTime, eventEndTime, priority1, zone2);
+
         //Create an event as a map for the DB
         event.put("UID", userUid);
         event.put("Date", selectedDate);
@@ -183,7 +183,6 @@ public class Event {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "Event has been added!");
-                        event1.setEventId(db.collection("events").document().getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

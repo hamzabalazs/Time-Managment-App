@@ -1,6 +1,7 @@
 package com.example.tma;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,15 +10,23 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.tma.suggestion.service.SuggestionService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.common.util.concurrent.FutureCallback;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -70,6 +79,35 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(),DisplayUserInfoActivity.class));
             }
         });
+        String UID = CurrentUser.getUid();
+        SuggestionService suggestionService = new SuggestionService(UID);
+        List<Event> eventList = new ArrayList<Event>();
+        eventList = suggestionService.getEvents();
+        String eventText = "";
+        if(eventList.size() == 0){
+            eventText = "It looks like you have no tasks for today!";
+            dataView.setText(eventText);
+        }
+        if(eventList != null) {
+            for (Event event : eventList) {
+                String date = event.getSelectedDate();
+                Date c = Calendar.getInstance().getTime();
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                String currDate = sdf.format(c);
+                if (!date.equals(currDate)) {
+                    continue;
+                }
+                String title = event.getEventTitle();
+                String startDate = event.getEventStartsAtDate();
+                String endDate = event.getEventEndsAtDate();
+                String zone = event.getZoneOfTheEvent().toString();
+                String priority = event.getPriorityLevel().toString();
+
+                eventText = eventText + title + "\n" + startDate + " - " + endDate + "\n" + zone + "\n" + priority + "\n\n";
+                dataView.setText(eventText);
+            }
+        }
+
 
     }
 
