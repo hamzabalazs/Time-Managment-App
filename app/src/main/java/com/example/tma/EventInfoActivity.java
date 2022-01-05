@@ -26,7 +26,7 @@ public class EventInfoActivity extends AppCompatActivity {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-    TextView sort1,sort2,sort3,sort4,back,dataView;
+    TextView back,dataView;
     SuggestionService service = new SuggestionService(currentUser.getUid());
     private List<Event> eventek = new ArrayList<Event>();
 

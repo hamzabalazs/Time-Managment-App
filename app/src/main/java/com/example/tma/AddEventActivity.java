@@ -37,6 +37,7 @@ import java.util.TimeZone;
 public class AddEventActivity extends AppCompatActivity {
 
     //Map<String, Object> event = new HashMap<>();
+    String date = "";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     NumberPicker startTimeHour, startTimeMin, endTimeHour, endTimeMin;
     TextView startTimeTextView, endTimeTextView;
@@ -73,9 +74,16 @@ public class AddEventActivity extends AppCompatActivity {
         priority.setAdapter(new ArrayAdapter<Priority>(this, R.layout.support_simple_spinner_dropdown_item, Priority.values()));
 
         FirebaseUser CurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+
         calendarV.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                date = "";
+                String Day = String.valueOf(dayOfMonth);
+                String Year = String.valueOf(year);
+                month++;
+                String Month = String.valueOf(month);
+                date = Day+"/"+Month+"/"+Year;
                 name.setVisibility(View.VISIBLE);
                 description.setVisibility(View.VISIBLE);
                 zone.setVisibility(View.VISIBLE);
@@ -106,7 +114,7 @@ public class AddEventActivity extends AppCompatActivity {
                 Event.addEventOnClick(db,
 
                         CurrentUser.getUid(),
-                        calendarV,
+                        date,
                         startTimeHour,
                         startTimeMin,
                         endTimeHour,
