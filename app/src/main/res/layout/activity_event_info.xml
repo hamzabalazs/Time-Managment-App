@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".EventInfoActivity">
 
+
     <TextView
         android:id="@+id/sortByTimeView"
         android:layout_width="wrap_content"
@@ -37,6 +38,7 @@
         android:id="@+id/sortByPriorityView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="sortByPriority"
         android:text="Sort by priority!"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView13" />
@@ -53,6 +55,8 @@
         android:id="@+id/eventListView"
         android:layout_width="409dp"
         android:layout_height="609dp"
+        android:text="@string/defaultString"
+        android:scrollbars="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sortByTimeView" />
@@ -62,6 +66,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
+        android:onClick="BacktoMain"
         android:text="Back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView13" />

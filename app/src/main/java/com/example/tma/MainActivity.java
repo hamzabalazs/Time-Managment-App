@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     CollectionReference eventRef = db.collection("events");
     Button calendarButton;
     Button userButton;
+    Button eventInfoButton;
     TextView welcomeView, dataView;
 
     @Override
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         userButton = findViewById(R.id.userInfoButton);
         welcomeView = findViewById(R.id.welcomeTextView);
         dataView = findViewById(R.id.currTaskTextView);
+        eventInfoButton = findViewById(R.id.eventListButton);
 
         db.collection("users").document(CurrentUser.getUid())
                 .get()
@@ -77,6 +79,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), DisplayUserInfoActivity.class));
+            }
+        });
+
+        eventInfoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),EventInfoActivity.class));
             }
         });
 
