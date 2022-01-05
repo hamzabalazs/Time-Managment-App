@@ -138,33 +138,42 @@ public class SuggestionService {
     //if it's true it sorts the events only in the zones for every zone which will help for the sortByZone() method.
     public void sortByStartTime(Boolean sortByTimeInZones, List<Event> eventsToSort) {
         if (sortByTimeInZones) {
-            List<Event> eventsSortedByTime = new ArrayList<Event>();
-            int helpIndexEnd = 0;
-            int helpIndexStart = 0;
-            //sort the whole list of events
-            sortByZone(eventsToSort);
-            for (int i = 0; i < eventsToSort.size() - 1; i++) {
-                if (eventsToSort.get(i).getZoneOfTheEvent() == eventsToSort.get(i + 1).getZoneOfTheEvent()) {
-                    continue;
-                } else {
-                    helpIndexEnd = i;
-                    List<Event> helperListOfEvents = null;
-                    helperListOfEvents = eventsToSort.subList(helpIndexStart, helpIndexEnd);
-                    Collections.sort(helperListOfEvents, new Event.SortByStartTime());
-                    for(Event event:helperListOfEvents){
-                        eventsSortedByTime.add(event);
-                    }
-                    helpIndexStart = i + 1;
-                }
-            }
-            if (helpIndexStart != 0) {
-                eventsToSort.clear();
-                for(Event event: eventsSortedByTime){
-                    eventsToSort.add(event);
-                }
-            } else {
-                Collections.sort(eventsToSort, new Event.SortByStartTime());
-            }
+//            List<Event> eventsSortedByTime = new ArrayList<Event>();
+//            int helpIndexEnd;
+//            int helpIndexStart = 0;
+//            //sort the whole list of events
+//            sortByZone(eventsToSort);
+//            for (int i = 0; i < eventsToSort.size() - 1; i++) {
+//                if (eventsToSort.get(i).getZoneOfTheEvent() == eventsToSort.get(i + 1).getZoneOfTheEvent()) {
+//                    continue;
+//                } else {
+//                    helpIndexEnd = i;
+//                    List<Event> helperListOfEvents;
+//                    if (helpIndexStart == 0 && helpIndexEnd == 0) {
+//                        helperListOfEvents = new ArrayList<>();
+//                        helperListOfEvents.add(eventsToSort.get(helpIndexStart));
+//                        Collections.sort(helperListOfEvents, new Event.SortByStartTime());
+//                        for (Event event : helperListOfEvents) {
+//                            eventsSortedByTime.add(event);
+//                        }
+//                    } else {
+//                        helperListOfEvents = eventsToSort.subList(helpIndexStart, helpIndexEnd);
+//                        Collections.sort(helperListOfEvents, new Event.SortByStartTime());
+//                        for (Event event : helperListOfEvents) {
+//                            eventsSortedByTime.add(event);
+//                        }
+//                    }
+//                    helpIndexStart = i + 1;
+//                }
+//            }
+//            if (helpIndexStart != 0) {
+//                eventsToSort.clear();
+//                for (Event event : eventsSortedByTime) {
+//                    eventsToSort.add(event);
+//                }
+//            } else {
+//                Collections.sort(eventsToSort, new Event.SortByStartTime());
+//            }
         } else {
             Collections.sort(eventsToSort, new Event.SortByStartTime());
         }
