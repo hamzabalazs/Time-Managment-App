@@ -65,16 +65,16 @@ public class Event {
                 return 0;
             }else{
                 if(e1.getPriorityLevel() == Priority.CRITICAL && e2.getPriorityLevel() != Priority.CRITICAL){
-                    return 1;
+                    return -1;
                 }else {
                     if (e1.getPriorityLevel() == Priority.HIGH && e2.getPriorityLevel() != Priority.CRITICAL && e2.getPriorityLevel() != Priority.HIGH){
-                        return 1;
+                        return -1;
                     }else{
                         if(e1.getPriorityLevel() == Priority.NORMAL && e2.getPriorityLevel() != Priority.CRITICAL && e2.getPriorityLevel() != Priority.HIGH && e2.getPriorityLevel() != Priority.NORMAL ){
-                            return 1;
+                            return -1;
                         }else{
                             if(e1.getPriorityLevel() == Priority.LOW && e2.getPriorityLevel() != Priority.LOW){
-                                return -1;
+                                return 1;
                             }
                         }
                     }
@@ -82,16 +82,16 @@ public class Event {
             }
 
             if(e2.getPriorityLevel() == Priority.CRITICAL && e1.getPriorityLevel() != Priority.CRITICAL){
-                return -1;
+                return 1;
             }else {
                 if (e2.getPriorityLevel() == Priority.HIGH && e1.getPriorityLevel() != Priority.CRITICAL && e1.getPriorityLevel() != Priority.HIGH){
-                    return -1;
+                    return 1;
                 }else{
                     if(e2.getPriorityLevel() == Priority.NORMAL && e1.getPriorityLevel() != Priority.CRITICAL && e1.getPriorityLevel() != Priority.HIGH && e1.getPriorityLevel() != Priority.NORMAL ){
-                        return -1;
+                        return 1;
                     }else{
                         if(e2.getPriorityLevel() == Priority.LOW && e1.getPriorityLevel() != Priority.LOW){
-                            return 1;
+                            return -1;
                         }
                     }
                 }
