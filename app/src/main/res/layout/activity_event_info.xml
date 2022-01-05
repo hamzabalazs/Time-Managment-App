@@ -11,6 +11,7 @@
         android:id="@+id/sortByTimeView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="sortByTime"
         android:text="Sort by time!"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sortByZoneTimeView" />
@@ -19,6 +20,7 @@
         android:id="@+id/sortByZoneTimeView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="sortByTimeAndZone"
         android:text="Sort by zone and time!"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sortByZonePriorityView" />
@@ -47,6 +49,7 @@
         android:id="@+id/sortByZonePriorityView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="sortByZoneAndPriority"
         android:text="Sort by zone, then priority!"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sortByPriorityView" />

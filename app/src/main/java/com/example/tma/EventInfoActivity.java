@@ -95,24 +95,7 @@ public class EventInfoActivity extends AppCompatActivity {
     }
 
     public void sortByPriority(View v){
-//        db.collection("events").whereEqualTo("UID",currentUser.getUid())
-//                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//            @Override
-//            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//                for (QueryDocumentSnapshot docsnap : queryDocumentSnapshots) {
-//                    String eventId = docsnap.getId();
-//                    String selectedDate = docsnap.get("Date").toString();
-//                    String title = docsnap.get("Title").toString();
-//                    String startDate = docsnap.get("StartsAtDate").toString();
-//                    String endDate = docsnap.get("EndsAtDate").toString();
-//                    String description = docsnap.get("Description").toString();
-//                    String priority = docsnap.get("priority").toString();
-//                    String zone = docsnap.get("zone").toString();
-//                    Priority priorityLevel = Priority.valueOf(priority);
-//                    Zone zoneOfTheEvent = Zone.valueOf(zone);
-//                    Event event = new Event(eventId,currentUser.getUid(), selectedDate, title, description, startDate, endDate, priorityLevel, zoneOfTheEvent);
-//                    eventek.add(event);
-//                }
+
                 String eventText = "";
                 dataView.setText(R.string.defaultString);
                 service.sortEventsByPriority(eventek);
@@ -136,8 +119,89 @@ public class EventInfoActivity extends AppCompatActivity {
                 }
                 dataView.setText(eventText);
 
+    }
+
+    public void sortByZoneAndPriority(View v){
+        String eventText = "";
+        dataView.setText(R.string.defaultString);
+        service.sortByZone(eventek);
+
+
+        for(Event event : eventek){
+            String date = event.getSelectedDate();
+            Date c = Calendar.getInstance().getTime();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            String currDate = sdf.format(c);
+            if (!date.equals(currDate)) {
+                continue;
             }
-//        });
-//    }
+            String title = event.getEventTitle();
+            String startDate = event.getEventStartsAtDate();
+            String endDate = event.getEventEndsAtDate();
+            String description = event.getEventDescription();
+            String priority = event.getPriorityLevel().toString();
+            String zone = event.getZoneOfTheEvent().toString();
+
+            eventText = eventText + title + "\n" + description + "\n" + startDate + " - " + endDate + "\n" + zone + "\n" + priority + "\n\n";
+        }
+        dataView.setText(eventText);
+
+    }
+
+    public void sortByTimeAndZone(View v){
+        String eventText = "";
+        dataView.setText(R.string.defaultString);
+        service.sortByStartTime(true,eventek);
+
+
+        for(Event event : eventek){
+            String date = event.getSelectedDate();
+            Date c = Calendar.getInstance().getTime();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            String currDate = sdf.format(c);
+            if (!date.equals(currDate)) {
+                continue;
+            }
+            String title = event.getEventTitle();
+            String startDate = event.getEventStartsAtDate();
+            String endDate = event.getEventEndsAtDate();
+            String description = event.getEventDescription();
+            String priority = event.getPriorityLevel().toString();
+            String zone = event.getZoneOfTheEvent().toString();
+
+            eventText = eventText + title + "\n" + description + "\n" + startDate + " - " + endDate + "\n" + zone + "\n" + priority + "\n\n";
+        }
+        dataView.setText(eventText);
+
+    }
+
+    public void sortByTime(View v){
+        String eventText = "";
+        dataView.setText(R.string.defaultString);
+        service.sortByStartTime(false,eventek);
+
+
+        for(Event event : eventek){
+            String date = event.getSelectedDate();
+            Date c = Calendar.getInstance().getTime();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            String currDate = sdf.format(c);
+            if (!date.equals(currDate)) {
+                continue;
+            }
+            String title = event.getEventTitle();
+            String startDate = event.getEventStartsAtDate();
+            String endDate = event.getEventEndsAtDate();
+            String description = event.getEventDescription();
+            String priority = event.getPriorityLevel().toString();
+            String zone = event.getZoneOfTheEvent().toString();
+
+            eventText = eventText + title + "\n" + description + "\n" + startDate + " - " + endDate + "\n" + zone + "\n" + priority + "\n\n";
+        }
+        dataView.setText(eventText);
+
+    }
+
+
 
 }
