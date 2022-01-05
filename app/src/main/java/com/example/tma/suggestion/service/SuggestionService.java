@@ -148,7 +148,8 @@ public class SuggestionService {
                     continue;
                 } else {
                     helpIndexEnd = i;
-                    List<Event> helperListOfEvents = eventsToSort.subList(helpIndexStart, helpIndexEnd);
+                    List<Event> helperListOfEvents = null;
+                    helperListOfEvents = eventsToSort.subList(helpIndexStart, helpIndexEnd);
                     Collections.sort(helperListOfEvents, new Event.SortByStartTime());
                     eventsSortedByTime.addAll(helperListOfEvents);
                     helpIndexStart = i + 1;
@@ -156,7 +157,9 @@ public class SuggestionService {
             }
             if (helpIndexStart != 0) {
                 eventsToSort.clear();
-                eventsToSort.addAll(eventsSortedByTime);
+                for(Event event: eventsSortedByTime){
+                    eventsToSort.add(event);
+                }
             } else {
                 Collections.sort(eventsToSort, new Event.SortByStartTime());
             }
