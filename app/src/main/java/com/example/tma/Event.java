@@ -109,7 +109,7 @@ public class Event {
         }
     }
 
-    public static void addEventOnClick(FirebaseFirestore db,String userUid, CalendarView calendarDate, NumberPicker startTimeHour, NumberPicker startTimeMin, NumberPicker endTimeHour, NumberPicker endTimeMin, EditText eventTitle, EditText eventDescription, Spinner zone, Spinner priority) {
+    public static void addEventOnClick(FirebaseFirestore db,String userUid, String calendarDate, NumberPicker startTimeHour, NumberPicker startTimeMin, NumberPicker endTimeHour, NumberPicker endTimeMin, EditText eventTitle, EditText eventDescription, Spinner zone, Spinner priority) {
         Map<String, Object> event = new HashMap<>();
         String eventStartTime,eventEndTime;
         int startMin = startTimeMin.getValue();
@@ -141,8 +141,7 @@ public class Event {
             eventEndTime = endHour + ":" + endMin;
         }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        String selectedDate = sdf.format(new Date(calendarDate.getDate()));
+
         Priority priority1 = Priority.NORMAL;
         for (Priority priority2 : Priority.values()) {
             if (priority.getSelectedItem().toString().trim() == priority2.name()) {
@@ -167,7 +166,7 @@ public class Event {
 
         //Create an event as a map for the DB
         event.put("UID", userUid);
-        event.put("Date", selectedDate);
+        event.put("Date", calendarDate);
         event.put("Title", eventTitle.getText().toString().trim());
         event.put("Description", eventDescription.getText().toString().trim());
         event.put("StartsAtDate", eventStartTime);
