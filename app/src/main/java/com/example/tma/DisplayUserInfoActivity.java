@@ -40,8 +40,6 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
         nameTextView = findViewById(R.id.nameView);
         emailTextView = findViewById(R.id.emailView);
         zoneTextView = findViewById(R.id.zoneView);
-        resetEmailTextView = findViewById(R.id.resetEmail);
-        resetZoneTextView = findViewById(R.id.resetZone);
         button = findViewById(R.id.backButton);
 
         docref.get()
@@ -73,58 +71,10 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
             }
         });
 
-        resetEmailTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText resetMail = new EditText(v.getContext());
-                AlertDialog.Builder emailResetDialog = new AlertDialog.Builder(v.getContext());
-                emailResetDialog.setTitle("Reset Email?");
-                emailResetDialog.setMessage("Enter your new Email to change the old one!");
-                emailResetDialog.setView(resetMail);
 
-                emailResetDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String mail = resetMail.getText().toString();
-                        docref.update("Email",mail);
 
-                    }
-                });
-                emailResetDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-            }
-        });
-
-        resetZoneTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText resetZone = new EditText(v.getContext());
-                AlertDialog.Builder zoneResetDialog = new AlertDialog.Builder(v.getContext());
-                zoneResetDialog.setTitle("Reset Zone?");
-                zoneResetDialog.setMessage("Enter your new Zone to change the old one!");
-                zoneResetDialog.setView(resetZone);
-
-                zoneResetDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String zone = resetZone.getText().toString();
-                        docref.update("Zone",zone);
-
-                    }
-                });
-                zoneResetDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-            }
-        });
 
 
     }
+    
 }
