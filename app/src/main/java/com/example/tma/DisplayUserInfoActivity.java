@@ -76,5 +76,5 @@ public class DisplayUserInfoActivity extends AppCompatActivity {
 
 
     }
-    
+
 }

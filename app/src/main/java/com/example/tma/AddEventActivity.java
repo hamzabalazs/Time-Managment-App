@@ -83,7 +83,18 @@ public class AddEventActivity extends AppCompatActivity {
                 String Year = String.valueOf(year);
                 month++;
                 String Month = String.valueOf(month);
-                date = Day+"/"+Month+"/"+Year;
+                if(dayOfMonth < 10 && month < 10){
+                    date = "0" + Day+"/0"+Month+"/"+Year;
+                }
+                if(dayOfMonth < 10 && month >= 10){
+                    date = "0" + Day+"/"+Month+"/"+Year;
+                }
+                if(dayOfMonth >= 10 && month < 10){
+                    date = Day+"/0"+Month+"/"+Year;
+                }
+                if(dayOfMonth >= 10 && month >= 10){
+                    date = Day+"/"+Month+"/"+Year;
+                }
                 name.setVisibility(View.VISIBLE);
                 description.setVisibility(View.VISIBLE);
                 zone.setVisibility(View.VISIBLE);
