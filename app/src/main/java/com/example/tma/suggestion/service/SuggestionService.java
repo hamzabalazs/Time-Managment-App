@@ -151,7 +151,9 @@ public class SuggestionService {
                     List<Event> helperListOfEvents = null;
                     helperListOfEvents = eventsToSort.subList(helpIndexStart, helpIndexEnd);
                     Collections.sort(helperListOfEvents, new Event.SortByStartTime());
-                    eventsSortedByTime.addAll(helperListOfEvents);
+                    for(Event event:helperListOfEvents){
+                        eventsSortedByTime.add(event);
+                    }
                     helpIndexStart = i + 1;
                 }
             }
