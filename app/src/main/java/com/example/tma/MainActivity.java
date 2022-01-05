@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         userButton = findViewById(R.id.userInfoButton);
         welcomeView = findViewById(R.id.welcomeTextView);
         dataView = findViewById(R.id.currTaskTextView);
+        dataView.setMovementMethod(new ScrollingMovementMethod());
         eventInfoButton = findViewById(R.id.eventListButton);
 
         db.collection("users").document(CurrentUser.getUid())
