@@ -34,10 +34,8 @@ import java.util.logging.Logger;
 
 //The suggestion service is giving suggestions to the user, taking in consideration the zone and the priority of the event
 public class SuggestionService {
-    private List<Event> events = new ArrayList<Event>();
+    private List<Event> events = Collections.synchronizedList(new ArrayList<Event>());
     final FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-
 
 
     private Priority priorityLevel;
@@ -74,35 +72,64 @@ public class SuggestionService {
 
      */
 
-    public SuggestionService(String UID) {
+//    public SuggestionService(String UID) {
+//
+//        db.collection("events").whereEqualTo("UID",UID)
+//                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//            @Override
+//            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                for (QueryDocumentSnapshot docsnap : queryDocumentSnapshots) {
+//                    String eventId = docsnap.getId();
+//                    String selectedDate = docsnap.get("Date").toString();
+//                    String title = docsnap.get("Title").toString();
+//                    String startDate = docsnap.get("StartsAtDate").toString();
+//                    String endDate = docsnap.get("EndsAtDate").toString();
+//                    String description = docsnap.get("Description").toString();
+//                    String priority = docsnap.get("priority").toString();
+//                    String zone = docsnap.get("zone").toString();
+//                    priorityLevel = Priority.valueOf(priority);
+//                    zoneOfTheEvent = Zone.valueOf(zone);
+//                    Event event = new Event(eventId,UID, selectedDate, title, description, startDate, endDate, priorityLevel, zoneOfTheEvent);
+//                    events.add(event);
+//                }
+//            }
+//        });
+//
+//
+//
+//    }
 
-        db.collection("events").whereEqualTo("UID",UID)
-                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+    public SuggestionService(String UID) {
+        getEventsFromDb(UID);
+    }
+    public void getEventsFromDb(String UID){
+        db.collection("events").whereEqualTo("UID", UID)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for (QueryDocumentSnapshot docsnap : queryDocumentSnapshots) {
-                    String eventId = docsnap.getId();
-                    String selectedDate = docsnap.get("Date").toString();
-                    String title = docsnap.get("Title").toString();
-                    String startDate = docsnap.get("StartsAtDate").toString();
-                    String endDate = docsnap.get("EndsAtDate").toString();
-                    String description = docsnap.get("Description").toString();
-                    String priority = docsnap.get("priority").toString();
-                    String zone = docsnap.get("zone").toString();
-                    priorityLevel = Priority.valueOf(priority);
-                    zoneOfTheEvent = Zone.valueOf(zone);
-                    Event event = new Event(eventId,UID, selectedDate, title, description, startDate, endDate, priorityLevel, zoneOfTheEvent);
-                    events.add(event);
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot docsnap : task.getResult()) {
+                        String eventId = docsnap.getId();
+                        String selectedDate = docsnap.get("Date").toString();
+                        String title = docsnap.get("Title").toString();
+                        String startDate = docsnap.get("StartsAtDate").toString();
+                        String endDate = docsnap.get("EndsAtDate").toString();
+                        String description = docsnap.get("Description").toString();
+                        String priority = docsnap.get("priority").toString();
+                        String zone = docsnap.get("zone").toString();
+                        priorityLevel = Priority.valueOf(priority);
+                        zoneOfTheEvent = Zone.valueOf(zone);
+                        Event event = new Event(eventId, UID, selectedDate, title, description, startDate, endDate, priorityLevel, zoneOfTheEvent);
+                        events.add(event);
+                    }
+                }else{
+                    if(task.isComplete()){
+                        System.out.println("Creating event done");
+                    }
                 }
             }
         });
-
-
-
     }
-
-
-
 
     //Sorts the events(higher priority first)
     public void sortEventsByPriority(List<Event> events) {
@@ -194,6 +221,11 @@ public class SuggestionService {
             Collections.sort(events, new Event.SortByStartTime());
         }
     }
+
+    public static SuggestionService getSuggestionService(String UID){
+        return  new SuggestionService(UID);
+    }
+
     public List<Event> getEvents() {
         return events;
     }
