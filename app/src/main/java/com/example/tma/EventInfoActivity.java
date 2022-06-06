@@ -5,8 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tma.suggestion.service.SuggestionService;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -57,7 +60,8 @@ public class EventInfoActivity extends AppCompatActivity {
                     String zone = docsnap.get("zone").toString();
                     Priority priorityLevel = Priority.valueOf(priority);
                     Zone zoneOfTheEvent = Zone.valueOf(zone);
-                    Event event = new Event(eventId,currentUser.getUid(), selectedDate, title, description, startDate, endDate, priorityLevel, zoneOfTheEvent);
+                    Boolean completed = (Boolean) docsnap.get("completed");
+                    Event event = new Event(eventId,currentUser.getUid(), selectedDate, title, description, startDate, endDate, priorityLevel, zoneOfTheEvent,completed);
                     eventek.add(event);
                 }
                 String eventText = "";
@@ -75,11 +79,39 @@ public class EventInfoActivity extends AppCompatActivity {
                     String description = event.getEventDescription();
                     String priority = event.getPriorityLevel().toString();
                     String zone = event.getZoneOfTheEvent().toString();
+                    Boolean completed = event.isCompleted();
+                    String completedOrNot = "";
+                    if(completed){
+                        completedOrNot = "This task is done";
+                    }else{
+                        completedOrNot = "This task isn't done";
+                    }
 
-                    eventText = eventText + title + "\n" + description + "\n" + startDate + " - " + endDate + "\n" + zone + "\n" + priority + "\n\n";
+                    eventText = eventText + title + "\n" + description + "\n" + startDate + " - " + endDate + "\n" + zone + "\n" + priority + "\n"+ completedOrNot +"\n\n";
                 }
                 dataView.setText(eventText);
 
+            }
+        });
+//        String complete
+        dataView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                PopupMenu popupMenu = new PopupMenu(EventInfoActivity.this, view);
+
+                // Inflating popup menu from popup_menu.xml file
+                popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        // Toast message on menu item clicked
+                        Toast.makeText(EventInfoActivity.this, "You Clicked " + menuItem.getTitle(), Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+                // Showing the popup menu
+                popupMenu.show();
+                return true;
             }
         });
 

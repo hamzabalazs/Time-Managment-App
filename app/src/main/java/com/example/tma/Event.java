@@ -44,8 +44,9 @@ public class Event {
     private Zone zoneOfTheEvent;
     private String userUid;
     private String selectedDate;
+    private boolean completed;
 
-    public Event(String eventId,String userUid, String selectedDate, String eventTitle, String eventDescription, String eventStartsAtDate, String eventEndsAtDate, Priority priorityLevel, Zone zoneOfTheEvent) {
+    public Event(String eventId,String userUid, String selectedDate, String eventTitle, String eventDescription, String eventStartsAtDate, String eventEndsAtDate, Priority priorityLevel, Zone zoneOfTheEvent, Boolean completed) {
         this.eventId = eventId;
         this.userUid = userUid;
         this.selectedDate = selectedDate;
@@ -56,6 +57,15 @@ public class Event {
         this.eventEndsAtDate = eventEndsAtDate;
         this.priorityLevel = priorityLevel;
         this.zoneOfTheEvent = zoneOfTheEvent;
+        this.completed = completed;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 
     public static class SortByPriority implements Comparator<Event> {
@@ -174,6 +184,7 @@ public class Event {
         event.put("zone", zone.getSelectedItem().toString());
         event.put("priority", priority.getSelectedItem().toString());
         event.put("createdAtTimestamp", new Date());
+        event.put("completed",false);
 
     //Adding the created event to the db
         db.collection("events")

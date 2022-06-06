@@ -41,6 +41,63 @@ public class MainActivity extends AppCompatActivity {
     TextView welcomeView, dataView;
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        String UID = CurrentUser.getUid();
+        SuggestionService suggestionService = new SuggestionService(UID);
+        List<Event> eventList = new ArrayList<Event>();
+        List<Event> finalEventList = eventList;
+        db.collection("events").whereEqualTo("UID", UID)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot docsnap : task.getResult()) {
+                        String eventId = docsnap.getId();
+                        String selectedDate = docsnap.get("Date").toString();
+                        String title = docsnap.get("Title").toString();
+                        String startDate = docsnap.get("StartsAtDate").toString();
+                        String endDate = docsnap.get("EndsAtDate").toString();
+                        String description = docsnap.get("Description").toString();
+                        String priority = docsnap.get("priority").toString();
+                        String zone = docsnap.get("zone").toString();
+                        Priority priorityLevel = Priority.valueOf(priority);
+                        Zone  zoneOfTheEvent = Zone.valueOf(zone);
+                        Boolean completed = (Boolean) docsnap.get("completed");
+                        Event event = new Event(eventId, UID, selectedDate, title, description, startDate, endDate, priorityLevel, zoneOfTheEvent,completed);
+                        finalEventList.add(event);
+                    }
+                    String eventText = "";
+                    if (finalEventList.size() == 0) {
+                        eventText = "It looks like you have no tasks for today!";
+                        dataView.setText(eventText);
+                    }
+                    if (finalEventList != null) {
+                        for (Event event : finalEventList) {
+                            String date = event.getSelectedDate();
+                            Date c = Calendar.getInstance().getTime();
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                            String currDate = sdf.format(c);
+                            if (!date.equals(currDate)) {
+                                continue;
+                            }
+                            String title = event.getEventTitle();
+                            String startDate = event.getEventStartsAtDate();
+                            String endDate = event.getEventEndsAtDate();
+                            String zone = event.getZoneOfTheEvent().toString();
+                            String priority = event.getPriorityLevel().toString();
+
+                            eventText = eventText + title + "\n" + startDate + " - " + endDate + "\n" + zone + "\n" + priority + "\n\n";
+                            dataView.setText(eventText);
+                        }
+                    }
+                }
+            }
+        });
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -111,7 +168,8 @@ public class MainActivity extends AppCompatActivity {
                         String zone = docsnap.get("zone").toString();
                         Priority priorityLevel = Priority.valueOf(priority);
                         Zone  zoneOfTheEvent = Zone.valueOf(zone);
-                        Event event = new Event(eventId, UID, selectedDate, title, description, startDate, endDate, priorityLevel, zoneOfTheEvent);
+                        Boolean completed = (Boolean) docsnap.get("completed");
+                        Event event = new Event(eventId, UID, selectedDate, title, description, startDate, endDate, priorityLevel, zoneOfTheEvent,completed);
                         finalEventList.add(event);
                     }
                     String eventText = "";

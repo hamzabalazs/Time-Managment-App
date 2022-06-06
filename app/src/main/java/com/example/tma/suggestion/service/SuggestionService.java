@@ -60,7 +60,8 @@ public class SuggestionService {
                         String zone = docsnap.get("zone").toString();
                         priorityLevel = Priority.valueOf(priority);
                         zoneOfTheEvent = Zone.valueOf(zone);
-                        Event event = new Event(eventId, UID, selectedDate, title, description, startDate, endDate, priorityLevel, zoneOfTheEvent);
+                        Boolean completed = (Boolean) docsnap.get("completed");
+                        Event event = new Event(eventId, UID, selectedDate, title, description, startDate, endDate, priorityLevel, zoneOfTheEvent,completed);
                         events.add(event);
                     }
                 } else {
