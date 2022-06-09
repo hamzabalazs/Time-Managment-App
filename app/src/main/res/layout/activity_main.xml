@@ -104,4 +104,13 @@
         app:layout_constraintStart_toEndOf="@+id/userInfoButton"
         app:layout_constraintTop_toBottomOf="@+id/welcomeTextView" />
 
+    <Button
+        android:id="@+id/eventCompleteButton"
+        android:layout_width="126dp"
+        android:layout_height="62dp"
+        android:text="Complete\nEvents"
+        tools:layout_editor_absoluteX="281dp"
+        tools:layout_editor_absoluteY="142dp"
+        tools:ignore="MissingConstraints" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

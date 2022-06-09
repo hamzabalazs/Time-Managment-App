@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     Button calendarButton;
     Button userButton;
     Button eventInfoButton;
+    Button eventCompleteButton;
     TextView welcomeView, dataView;
 
     @Override
@@ -109,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
         dataView = findViewById(R.id.currTaskTextView);
         dataView.setMovementMethod(new ScrollingMovementMethod());
         eventInfoButton = findViewById(R.id.eventListButton);
+        eventCompleteButton = findViewById(R.id.eventCompleteButton);
 
         db.collection("users").document(CurrentUser.getUid())
                 .get()
@@ -145,6 +147,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(),EventInfoActivity.class));
+            }
+        });
+
+        eventCompleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),CompleteEventActivity.class));
             }
         });
 

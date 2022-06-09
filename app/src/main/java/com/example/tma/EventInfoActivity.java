@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,8 +45,7 @@ public class EventInfoActivity extends AppCompatActivity {
         back = findViewById(R.id.backToMain);
 
 
-
-        db.collection("events").whereEqualTo("UID",currentUser.getUid())
+        db.collection("events").whereEqualTo("UID", currentUser.getUid())
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -61,11 +61,11 @@ public class EventInfoActivity extends AppCompatActivity {
                     Priority priorityLevel = Priority.valueOf(priority);
                     Zone zoneOfTheEvent = Zone.valueOf(zone);
                     Boolean completed = (Boolean) docsnap.get("completed");
-                    Event event = new Event(eventId,currentUser.getUid(), selectedDate, title, description, startDate, endDate, priorityLevel, zoneOfTheEvent,completed);
+                    Event event = new Event(eventId, currentUser.getUid(), selectedDate, title, description, startDate, endDate, priorityLevel, zoneOfTheEvent, completed);
                     eventek.add(event);
                 }
                 String eventText = "";
-                for(Event event : eventek){
+                for (Event event : eventek) {
                     String date = event.getSelectedDate();
                     Date c = Calendar.getInstance().getTime();
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -81,13 +81,13 @@ public class EventInfoActivity extends AppCompatActivity {
                     String zone = event.getZoneOfTheEvent().toString();
                     Boolean completed = event.isCompleted();
                     String completedOrNot = "";
-                    if(completed){
+                    if (completed) {
                         completedOrNot = "This task is done";
-                    }else{
+                    } else {
                         completedOrNot = "This task isn't done";
                     }
 
-                    eventText = eventText + title + "\n" + description + "\n" + startDate + " - " + endDate + "\n" + zone + "\n" + priority + "\n"+ completedOrNot +"\n\n";
+                    eventText = eventText + title + "\n" + description + "\n" + startDate + " - " + endDate + "\n" + zone + "\n" + priority + "\n" + completedOrNot + "\n\n";
                 }
                 dataView.setText(eventText);
 
@@ -116,50 +116,47 @@ public class EventInfoActivity extends AppCompatActivity {
         });
 
 
-
-
-
     }
 
 
     public void BacktoMain(View v) {
-        startActivity(new Intent(getApplicationContext(),MainActivity.class));
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
 
-    public void sortByPriority(View v){
+    public void sortByPriority(View v) {
 
-                String eventText = "";
-                dataView.setText(R.string.defaultString);
-                service.sortEventsByPriority(eventek);
+        String eventText = "";
+        dataView.setText(R.string.defaultString);
+        service.sortEventsByPriority(eventek);
 
-                for(Event event : eventek){
-                    String date = event.getSelectedDate();
-                    Date c = Calendar.getInstance().getTime();
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                    String currDate = sdf.format(c);
-                    if (!date.equals(currDate)) {
-                        continue;
-                    }
-                    String title = event.getEventTitle();
-                    String startDate = event.getEventStartsAtDate();
-                    String endDate = event.getEventEndsAtDate();
-                    String description = event.getEventDescription();
-                    String priority = event.getPriorityLevel().toString();
-                    String zone = event.getZoneOfTheEvent().toString();
+        for (Event event : eventek) {
+            String date = event.getSelectedDate();
+            Date c = Calendar.getInstance().getTime();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            String currDate = sdf.format(c);
+            if (!date.equals(currDate)) {
+                continue;
+            }
+            String title = event.getEventTitle();
+            String startDate = event.getEventStartsAtDate();
+            String endDate = event.getEventEndsAtDate();
+            String description = event.getEventDescription();
+            String priority = event.getPriorityLevel().toString();
+            String zone = event.getZoneOfTheEvent().toString();
 
-                    eventText = eventText + title + "\n" + description + "\n" + startDate + " - " + endDate + "\n" + zone + "\n" + priority + "\n\n";
-                }
-                dataView.setText(eventText);
+            eventText = eventText + title + "\n" + description + "\n" + startDate + " - " + endDate + "\n" + zone + "\n" + priority + "\n\n";
+        }
+        dataView.setText(eventText);
 
     }
 
-    public void sortByZoneAndPriority(View v){
+    public void sortByZoneAndPriority(View v) {
         String eventText = "";
         dataView.setText(R.string.defaultString);
         service.sortByZone(eventek);
 
 
-        for(Event event : eventek){
+        for (Event event : eventek) {
             String date = event.getSelectedDate();
             Date c = Calendar.getInstance().getTime();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -180,13 +177,13 @@ public class EventInfoActivity extends AppCompatActivity {
 
     }
 
-    public void sortByTimeAndZone(View v){
+    public void sortByTimeAndZone(View v) {
         String eventText = "";
         dataView.setText(R.string.defaultString);
-        service.sortByStartTime(true,eventek);
+        service.sortByStartTime(true, eventek);
 
 
-        for(Event event : eventek){
+        for (Event event : eventek) {
             String date = event.getSelectedDate();
             Date c = Calendar.getInstance().getTime();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -207,13 +204,13 @@ public class EventInfoActivity extends AppCompatActivity {
 
     }
 
-    public void sortByTime(View v){
+    public void sortByTime(View v) {
         String eventText = "";
         dataView.setText(R.string.defaultString);
-        service.sortByStartTime(false,eventek);
+        service.sortByStartTime(false, eventek);
 
 
-        for(Event event : eventek){
+        for (Event event : eventek) {
             String date = event.getSelectedDate();
             Date c = Calendar.getInstance().getTime();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -233,7 +230,6 @@ public class EventInfoActivity extends AppCompatActivity {
         dataView.setText(eventText);
 
     }
-
 
 
 }
