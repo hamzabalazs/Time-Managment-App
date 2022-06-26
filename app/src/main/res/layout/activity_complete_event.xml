@@ -1,63 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@android:color/holo_blue_light"
+    tools:context=".CompleteEventActivity">
 
     <TextView
         android:id="@+id/backToMain2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_width="97dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="4dp"
         android:fontFamily="@font/lato"
         android:onClick="BacktoMain"
         android:text="Back"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="32dp"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView17"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:layout_editor_absoluteX="175dp"
-        tools:layout_editor_absoluteY="32dp"
-        tools:ignore="MissingConstraints" />
+        android:layout_width="338dp"
+        android:layout_height="57dp"
+        android:layout_marginTop="96dp"
+        android:text="Here you can flag you finished tasks completed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.219"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/eventView"
-        android:layout_width="405dp"
-        android:layout_height="448dp"
-        android:layout_marginTop="88dp"
+        android:layout_width="377dp"
+        android:layout_height="138dp"
+        android:layout_marginTop="8dp"
+        android:background="#02FAF1"
         android:fontFamily="@font/lato"
         android:scrollbars="vertical"
         android:text="@string/defaultString"
-        android:textColor="@android:color/white"
+        android:textColor="@color/primaryTextColor"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.466"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView17" />
+        app:layout_constraintTop_toBottomOf="@+id/textView17" />
 
     <Button
         android:id="@+id/eventCompleteDButton"
-        android:layout_width="180dp"
-        android:layout_height="78dp"
+        android:layout_width="164dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="40dp"
         android:text="Completed"
-        tools:layout_editor_absoluteX="117dp"
-        tools:layout_editor_absoluteY="309dp"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.105"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventView" />
 
     <Button
         android:id="@+id/eventNotCompleted"
-        android:layout_width="180dp"
-        android:layout_height="78dp"
+        android:layout_width="164dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="40dp"
         android:text="Not finished"
-        tools:layout_editor_absoluteX="115dp"
-        tools:layout_editor_absoluteY="411dp"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.935"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

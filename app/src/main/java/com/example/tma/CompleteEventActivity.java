@@ -7,10 +7,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -28,10 +31,10 @@ public class CompleteEventActivity extends AppCompatActivity {
     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
     TextView dataView, back;
     Button eventCompletedButton, eventNotFinishedButton;
-    private List<Event> eventek = new ArrayList<Event>();
+    private List<Event> eventek = new ArrayList<Event>(2);
     private int counter = 0;
+    private final String noEventsMessage = "There are no events to complete";
 
-    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,39 +67,37 @@ public class CompleteEventActivity extends AppCompatActivity {
                     }
                 }
             }
-        });
-        if (counter == 0) {
-            if (eventek.get(counter + 1) == null) {
-                dataView.setText("There are no events to complete");
-            } else {
-                dataView.setText(getEventTextForIndex(counter));
-            }
-
-        }
-
-        eventCompletedButton.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("SetTextI18n")
+        }).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onClick(View view) {
-                if (eventek.get(counter + 1) == null) {
-                    dataView.setText("There are no events to complete");
-                } else {
-                    db.collection("events").document(eventek.get(counter).getEventId()).update("completed", true);
-                    dataView.setText(getEventTextForIndex(++counter));
-                }
-            }
-        });
+            public void onComplete(Task<QuerySnapshot> task) {
 
-        eventNotFinishedButton.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onClick(View view) {
-                if (eventek.get(counter + 1) == null) {
-                    dataView.setText("There are no events to complete");
-                } else {
-                    dataView.setText(getEventTextForIndex(++counter));
+                if (counter == 0) {
+                    dataView.setText(getEventTextForIndex(counter));
                 }
 
+                eventCompletedButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (eventek.isEmpty()) {
+                            dataView.setText(noEventsMessage);
+                        } else {
+                            db.collection("events").document(eventek.get(counter).getEventId()).update("completed", true);
+                            dataView.setText(getEventTextForIndex(++counter));
+                        }
+                    }
+                });
+
+                eventNotFinishedButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (eventek.isEmpty()) {
+                            dataView.setText(noEventsMessage);
+                        } else {
+                            dataView.setText(getEventTextForIndex(++counter));
+                        }
+
+                    }
+                });
             }
         });
 
@@ -108,21 +109,24 @@ public class CompleteEventActivity extends AppCompatActivity {
 
     public String getEventTextForIndex(int index) {
         String eventText = "";
-        if (!eventek.get(index).isCompleted()) {
-//            String date = eventek.get(index).getSelectedDate();
-//            Date c = Calendar.getInstance().getTime();
-//            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-//            String currDate = sdf.format(c);
+        try {
+            if (!eventek.get(index).isCompleted()) {
+                String date = eventek.get(index).getSelectedDate();
 
-            String title = eventek.get(index).getEventTitle();
-            String startDate = eventek.get(index).getEventStartsAtDate();
-            String endDate = eventek.get(index).getEventEndsAtDate();
-            String description = eventek.get(index).getEventDescription();
-            String priority = eventek.get(index).getPriorityLevel().toString();
-            String zone = eventek.get(index).getZoneOfTheEvent().toString();
+                String title = eventek.get(index).getEventTitle();
+                String startDate = eventek.get(index).getEventStartsAtDate();
+                String endDate = eventek.get(index).getEventEndsAtDate();
+                String description = eventek.get(index).getEventDescription();
+                String priority = eventek.get(index).getPriorityLevel().toString();
+                String zone = eventek.get(index).getZoneOfTheEvent().toString();
 
-            eventText = eventText + title + "\n" + description + "\n" + startDate + " - " + endDate + "\n" + zone + "\n" + priority + "\n\n";
+                eventText = eventText + title + "\n" + description + "\n" + date + "\n" + startDate + " - " + endDate + "\n" + zone + "\n" + priority + "\n\n";
 
+            }
+
+        } catch (IndexOutOfBoundsException e) {
+            eventText = eventText + noEventsMessage;
+            return noEventsMessage;
         }
 
         return eventText;

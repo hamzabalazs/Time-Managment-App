@@ -15,6 +15,9 @@
             android:name=".EventInfoActivity"
             android:exported="true" />
         <activity
+            android:name=".CompleteEventActivity"
+            android:exported="true" />
+        <activity
             android:name=".DisplayUserInfoActivity"
             android:exported="true" />
         <activity
